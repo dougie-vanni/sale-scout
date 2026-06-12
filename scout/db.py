@@ -68,7 +68,9 @@ class DB:
     def get_retailers(self) -> list | None:
         try:
             rows = self._get("retailers", {"select": "*", "order": "id"})
-            return rows if rows else None
+            # strip nulls so rows behave like the JSON files (absent keys)
+            return [{k: v for k, v in r.items() if v is not None}
+                    for r in rows] if rows else None
         except Exception:
             return None
 
