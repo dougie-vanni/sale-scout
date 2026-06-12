@@ -1,31 +1,243 @@
 {
   "retailers": [
-    { "id": "maple",        "name": "The Maple Store",      "region": "AU", "type": "shopify", "base_url": "https://www.themaplestore.com.au", "currency": "AUD", "shipping_aud": 10,  "enabled": true },
-    { "id": "pickings",     "name": "Pickings & Parry",     "region": "AU", "type": "shopify", "base_url": "https://www.pickingsandparry.com",  "currency": "AUD", "shipping_aud": 10,  "enabled": true },
-    { "id": "informale",    "name": "Informale",            "region": "AU", "type": "shopify", "base_url": "https://informale.com.au",          "currency": "AUD", "shipping_aud": 10,  "enabled": true },
-    { "id": "doublemonk",   "name": "Double Monk",          "region": "AU", "type": "shopify", "base_url": "https://www.doublemonk.com",        "currency": "AUD", "shipping_aud": 12,  "enabled": true },
-    { "id": "upthere",      "name": "Up There Store",       "region": "AU", "type": "shopify", "base_url": "https://uptherestore.com",          "currency": "AUD", "shipping_aud": 10,  "enabled": true },
-    { "id": "penloe",       "name": "Penloe",               "region": "AU", "type": "shopify", "base_url": "https://penloe.com",                "currency": "AUD", "shipping_aud": 10,  "enabled": true },
-
-    { "id": "wythe",        "name": "Wythe",                "region": "US", "type": "shopify", "base_url": "https://wythenewyork.com",          "currency": "USD", "shipping_usd": 35,  "enabled": true },
-    { "id": "gitman",       "name": "Gitman Vintage",       "region": "US", "type": "shopify", "base_url": "https://www.gitmanvintage.com",     "currency": "USD", "shipping_usd": 35,  "enabled": true },
-    { "id": "bills",        "name": "Bill's Khakis",        "region": "US", "type": "shopify", "base_url": "https://www.billskhakis.com",       "currency": "USD", "shipping_usd": 35,  "enabled": true },
-    { "id": "mercer",       "name": "Mercer & Sons",        "region": "US", "type": "custom",  "base_url": "https://www.mercerandsons.com",     "currency": "USD", "shipping_usd": 40,  "enabled": false, "note": "Rarely discounts; custom scraper TODO" },
-    { "id": "oconnells",    "name": "O'Connell's",          "region": "US", "type": "custom",  "base_url": "https://www.oconnellsclothing.com", "currency": "USD", "shipping_usd": 50,  "enabled": false, "note": "Custom scraper TODO" },
-    { "id": "brooks",       "name": "Brooks Brothers",      "region": "US", "type": "custom",  "base_url": "https://www.brooksbrothers.com",    "currency": "USD", "shipping_usd": 30,  "enabled": false, "note": "Custom scraper TODO; has AU site" },
-    { "id": "jpress",       "name": "J.Press",              "region": "US", "type": "custom",  "base_url": "https://jpressonline.com",          "currency": "USD", "shipping_usd": 40,  "enabled": false, "note": "Verify: may be Shopify" },
-    { "id": "spier",        "name": "Spier & Mackay",       "region": "CA", "type": "shopify", "base_url": "https://spierandmackay.com",        "currency": "USD", "shipping_usd": 30,  "enabled": true },
-
-    { "id": "snstrange",    "name": "Standard & Strange",   "region": "US", "type": "shopify", "base_url": "https://www.standardandstrange.com","currency": "USD", "shipping_usd": 40,  "enabled": true },
-    { "id": "lostfound",    "name": "Lost & Found",         "region": "CA", "type": "shopify", "base_url": "https://www.lost-found.co",         "currency": "CAD", "shipping_usd": 35,  "enabled": true },
-    { "id": "namu",         "name": "namu shop",            "region": "US", "type": "shopify", "base_url": "https://namu-shop.co",              "currency": "USD", "shipping_usd": 35,  "enabled": true },
-    { "id": "independence", "name": "Independence Chicago", "region": "US", "type": "shopify", "base_url": "https://www.independence-chicago.com", "currency": "USD", "shipping_usd": 35, "enabled": true },
-    { "id": "drakes",       "name": "Drake's",              "region": "UK", "type": "shopify", "base_url": "https://www.drakes.com",            "currency": "GBP", "shipping_usd": 30,  "enabled": true },
-    { "id": "clutch",       "name": "Clutch Cafe",          "region": "UK", "type": "shopify", "base_url": "https://www.clutch-cafe.com",       "currency": "GBP", "shipping_usd": 30,  "enabled": true },
-    { "id": "trunk",        "name": "Trunk Clothiers",      "region": "UK", "type": "shopify", "base_url": "https://www.trunkclothiers.com",    "currency": "GBP", "shipping_usd": 30,  "enabled": true },
-    { "id": "end",          "name": "END.",                 "region": "UK", "type": "custom",  "base_url": "https://www.endclothing.com",       "currency": "AUD", "shipping_usd": 0,   "enabled": false, "note": "Noisy; custom scraper TODO, prices in AUD with free ship threshold" },
-
-    { "id": "kamakura",     "name": "Kamakura Shirts",      "region": "JP", "type": "custom",  "base_url": "https://kamakurashirts.com",        "currency": "USD", "shipping_usd": 30,  "enabled": false, "note": "Verify global-site platform" },
-    { "id": "beams",        "name": "BEAMS global",         "region": "JP", "type": "custom",  "base_url": "https://www.beams.co.jp/global",    "currency": "JPY", "shipping_usd": 35,  "enabled": false, "note": "Custom scraper TODO" }
+    {
+      "id": "maple",
+      "name": "The Maple Store",
+      "region": "AU",
+      "type": "shopify",
+      "base_url": "https://maplestore.com.au",
+      "currency": "AUD",
+      "shipping_aud": 10,
+      "enabled": true
+    },
+    {
+      "id": "pickings",
+      "name": "Pickings & Parry",
+      "region": "AU",
+      "type": "shopify",
+      "base_url": "https://www.pickingsandparry.com",
+      "currency": "AUD",
+      "shipping_aud": 10,
+      "enabled": true
+    },
+    {
+      "id": "informale",
+      "name": "Informale",
+      "region": "AU",
+      "type": "shopify",
+      "base_url": "https://informale.com.au",
+      "currency": "AUD",
+      "shipping_aud": 10,
+      "enabled": true
+    },
+    {
+      "id": "doublemonk",
+      "name": "Double Monk",
+      "region": "AU",
+      "type": "shopify",
+      "base_url": "https://www.doublemonk.com",
+      "currency": "AUD",
+      "shipping_aud": 12,
+      "enabled": true
+    },
+    {
+      "id": "upthere",
+      "name": "Up There Store",
+      "region": "AU",
+      "type": "shopify",
+      "base_url": "https://uptherestore.com",
+      "currency": "AUD",
+      "shipping_aud": 10,
+      "enabled": true
+    },
+    {
+      "id": "wythe",
+      "name": "Wythe",
+      "region": "US",
+      "type": "shopify",
+      "base_url": "https://wythenewyork.com",
+      "currency": "USD",
+      "shipping_usd": 35,
+      "enabled": true
+    },
+    {
+      "id": "gitman",
+      "name": "Gitman Vintage",
+      "region": "US",
+      "type": "shopify",
+      "base_url": "https://www.gitmanvintage.com",
+      "currency": "USD",
+      "shipping_usd": 35,
+      "enabled": true
+    },
+    {
+      "id": "bills",
+      "name": "Bill's Khakis",
+      "region": "US",
+      "type": "shopify",
+      "base_url": "https://www.billskhakis.com",
+      "currency": "USD",
+      "shipping_usd": 35,
+      "enabled": true
+    },
+    {
+      "id": "mercer",
+      "name": "Mercer & Sons",
+      "region": "US",
+      "type": "custom",
+      "base_url": "https://www.mercerandsons.com",
+      "currency": "USD",
+      "shipping_usd": 40,
+      "enabled": false,
+      "note": "Rarely discounts; custom scraper TODO"
+    },
+    {
+      "id": "oconnells",
+      "name": "O'Connell's",
+      "region": "US",
+      "type": "custom",
+      "base_url": "https://www.oconnellsclothing.com",
+      "currency": "USD",
+      "shipping_usd": 50,
+      "enabled": false,
+      "note": "Custom scraper TODO"
+    },
+    {
+      "id": "brooks",
+      "name": "Brooks Brothers",
+      "region": "US",
+      "type": "custom",
+      "base_url": "https://www.brooksbrothers.com",
+      "currency": "USD",
+      "shipping_usd": 30,
+      "enabled": false,
+      "note": "Custom scraper TODO; has AU site"
+    },
+    {
+      "id": "jpress",
+      "name": "J.Press",
+      "region": "US",
+      "type": "custom",
+      "base_url": "https://jpressonline.com",
+      "currency": "USD",
+      "shipping_usd": 40,
+      "enabled": false,
+      "note": "Verify: may be Shopify"
+    },
+    {
+      "id": "spier",
+      "name": "Spier & Mackay",
+      "region": "CA",
+      "type": "custom",
+      "base_url": "https://us.spierandmackay.com",
+      "currency": "USD",
+      "shipping_usd": 30,
+      "enabled": false,
+      "note": "Not Shopify; custom scraper TODO"
+    },
+    {
+      "id": "snstrange",
+      "name": "Standard & Strange",
+      "region": "US",
+      "type": "shopify",
+      "base_url": "https://www.standardandstrange.com",
+      "currency": "USD",
+      "shipping_usd": 40,
+      "enabled": true
+    },
+    {
+      "id": "lostfound",
+      "name": "Lost & Found",
+      "region": "CA",
+      "type": "shopify",
+      "base_url": "https://shoplostfound.com",
+      "currency": "CAD",
+      "shipping_usd": 35,
+      "enabled": true
+    },
+    {
+      "id": "namu",
+      "name": "namu shop",
+      "region": "US",
+      "type": "shopify",
+      "base_url": "https://www.namu-shop.com",
+      "currency": "USD",
+      "shipping_usd": 35,
+      "enabled": true
+    },
+    {
+      "id": "independence",
+      "name": "Independence Chicago",
+      "region": "US",
+      "type": "custom",
+      "base_url": "https://www.independence-chicago.com",
+      "currency": "USD",
+      "shipping_usd": 35,
+      "enabled": false,
+      "note": "Not Shopify; custom scraper TODO"
+    },
+    {
+      "id": "drakes",
+      "name": "Drake's",
+      "region": "UK",
+      "type": "shopify",
+      "base_url": "https://www.drakes.com",
+      "currency": "GBP",
+      "shipping_usd": 30,
+      "enabled": true
+    },
+    {
+      "id": "clutch",
+      "name": "Clutch Cafe",
+      "region": "UK",
+      "type": "shopify",
+      "base_url": "https://www.clutch-cafe.com",
+      "currency": "GBP",
+      "shipping_usd": 30,
+      "enabled": true
+    },
+    {
+      "id": "trunk",
+      "name": "Trunk Clothiers",
+      "region": "UK",
+      "type": "shopify",
+      "base_url": "https://www.trunkclothiers.com",
+      "currency": "GBP",
+      "shipping_usd": 30,
+      "enabled": true
+    },
+    {
+      "id": "end",
+      "name": "END.",
+      "region": "UK",
+      "type": "custom",
+      "base_url": "https://www.endclothing.com",
+      "currency": "AUD",
+      "shipping_usd": 0,
+      "enabled": false,
+      "note": "Noisy; custom scraper TODO, prices in AUD with free ship threshold"
+    },
+    {
+      "id": "kamakura",
+      "name": "Kamakura Shirts",
+      "region": "JP",
+      "type": "custom",
+      "base_url": "https://kamakurashirts.com",
+      "currency": "USD",
+      "shipping_usd": 30,
+      "enabled": false,
+      "note": "Verify global-site platform"
+    },
+    {
+      "id": "beams",
+      "name": "BEAMS global",
+      "region": "JP",
+      "type": "custom",
+      "base_url": "https://www.beams.co.jp/global",
+      "currency": "JPY",
+      "shipping_usd": 35,
+      "enabled": false,
+      "note": "Custom scraper TODO"
+    }
   ]
 }
