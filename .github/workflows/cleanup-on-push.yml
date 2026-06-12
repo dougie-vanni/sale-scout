@@ -1,0 +1,38 @@
+name: cleanup-on-push
+
+on:
+  push:
+    paths:
+      - ".github/workflows/cleanup-on-push.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Delete junk rows and report
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: |
+          URL="${SUPABASE_URL%/}"; URL="${URL%/rest/v1}"
+          del() {
+            echo "## $2" >> cleanup-report.txt
+            curl -s -X DELETE -D - -o /dev/null \
+              -H "apikey: $KEY" -H "Authorization: Bearer $KEY" \
+              -H "Prefer: count=exact" \
+              "$URL/rest/v1/items?$1" | grep -i "content-range\|HTTP/" >> cleanup-report.txt
+          }
+          : > cleanup-report.txt
+          del "status=eq.new&score_reason=eq.scorer%20error%3A%20rule-pass%20only" "error-scored items"
+          del "status=eq.new&or=(title.ilike.*women*,title.ilike.*ladies*,title.ilike.*skirt*,title.ilike.*blouse*)" "womenswear by title"
+          del "status=eq.new&or=(vendor.ilike.nike,vendor.ilike.adidas,title.ilike.*hooded*,title.ilike.*hoodie*)" "excluded vendors / hoodies"
+          git config user.name "cleanup-bot"
+          git config user.email "cleanup-bot@users.noreply.github.com"
+          git add cleanup-report.txt
+          git commit -m "Cleanup report"
+          git push

@@ -39,8 +39,7 @@
         "cardigan",
         "jumper",
         "crewneck",
-        "pullover",
-        "sweatshirt"
+        "pullover"
       ]
     },
     "belts": {
@@ -69,7 +68,6 @@
         "shoe",
         "loafer",
         "boot",
-        "sneaker",
         "derby",
         "oxford shoe",
         "moccasin",
@@ -156,7 +154,9 @@
       "tie dye",
       "tie-dye",
       "graphic print",
-      "logo print"
+      "logo print",
+      "hoodie",
+      "hooded"
     ],
     "gender_keywords": [
       "women",
@@ -172,6 +172,28 @@
       "bralette",
       "legging",
       "leggings"
+    ],
+    "vendor_excludes": [
+      "nike",
+      "adidas",
+      "asics",
+      "salomon",
+      "reebok",
+      "puma",
+      "converse",
+      "vans",
+      "new balance",
+      "stussy",
+      "carhartt wip",
+      "butter goods",
+      "metalwood",
+      "palace",
+      "supreme",
+      "brain dead",
+      "obey",
+      "huf",
+      "patta",
+      "pleasures"
     ]
   },
   "soft_prefer_colors": [
