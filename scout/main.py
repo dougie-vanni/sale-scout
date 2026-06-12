@@ -1,0 +1,103 @@
+"""SaleScout daily run: fetch -> filter -> dedup -> score -> landed cost -> store."""
+import json
+import pathlib
+import sys
+
+from . import shopify, filters, scorer, landed
+from .db import DB
+
+ROOT = pathlib.Path(__file__).resolve().parent.parent
+
+
+def load(name: str) -> dict:
+    return json.loads((ROOT / "config" / name).read_text())
+
+
+def item_key(c: dict) -> str:
+    return f"{c['retailer_id']}:{c['product_id']}:{c['variant_id']}"
+
+
+def main():
+    prefs = load("preferences.json")
+    registry = load("retailers.json")["retailers"]
+    db = DB()
+    muted = db.muted_retailers()
+    seen = db.existing_items()
+    print(f"DB: {len(seen)} known items, {len(muted)} muted retailers")
+
+    new_count = 0
+    for retailer in registry:
+        if not retailer.get("enabled") or retailer["id"] in muted:
+            continue
+        if retailer["type"] != "shopify":
+            continue  # custom scrapers: future work
+        print(f"-> {retailer['name']}")
+        try:
+            candidates = shopify.sale_candidates(retailer)
+        except Exception as e:
+            print(f"  ! retailer failed entirely: {e}")
+            continue
+        print(f"   {len(candidates)} on-sale variants")
+
+        kept = []
+        for c in candidates:
+            ok, cat, reason = filters.passes_rules(c, prefs)
+            if ok:
+                c["category"] = cat
+                kept.append(c)
+        print(f"   {len(kept)} pass rules")
+
+        for c in kept:
+            key = item_key(c)
+            prior = seen.get(key)
+            if prior:
+                status = prior["status"]
+                drop_needed = float(prior["price"]) * (1 - prefs["resurface_drop_pct"])
+                if status == "too_expensive" and c["price"] <= drop_needed:
+                    pass  # resurface at the new lower price
+                else:
+                    continue  # already handled
+
+            score, reason = scorer.score_item(c, prefs["style_brief"])
+            if score < prefs["score_threshold"]:
+                # remember rejection so we never pay to score it again
+                db.upsert_item({**_row(c, retailer, prefs),
+                                "status": "auto_rejected",
+                                "score": score, "score_reason": reason})
+                seen[item_key(c)] = {"status": "auto_rejected", "price": c["price"]}
+                continue
+
+            row = _row(c, retailer, prefs)
+            row.update({"status": "new", "score": score, "score_reason": reason})
+            db.upsert_item(row)
+            seen[key] = {"status": "new", "price": c["price"]}
+            new_count += 1
+            print(f"   + [{score}] {c['title']} ({c['variant_title']}) "
+                  f"{c['discount_pct']:.0%} off")
+
+    print(f"Done. {new_count} new items surfaced.")
+
+
+def _row(c: dict, retailer: dict, prefs: dict) -> dict:
+    costs = landed.landed(c, retailer, prefs)
+    return {
+        "item_key": item_key(c),
+        "retailer_id": c["retailer_id"],
+        "retailer_name": c["retailer_name"],
+        "region": c["region"],
+        "category": c["category"],
+        "title": c["title"],
+        "vendor": c["vendor"],
+        "variant_title": c["variant_title"],
+        "currency": c["currency"],
+        "price": c["price"],
+        "compare_at": c["compare_at"],
+        "discount_pct": c["discount_pct"],
+        "url": c["url"],
+        "image": c["image"],
+        **costs,
+    }
+
+
+if __name__ == "__main__":
+    sys.exit(main())

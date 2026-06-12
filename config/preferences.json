@@ -1,0 +1,37 @@
+{
+  "discount_thresholds": {
+    "core": 0.30,
+    "speculative": 0.50
+  },
+  "categories": {
+    "shirts":   { "tier": "core",        "keywords": ["shirt", "ocbd", "oxford", "button down", "button-down", "popover", "flannel"] },
+    "trousers": { "tier": "core",        "keywords": ["trouser", "chino", "pant", "khaki", "fatigue", "cord", "jean", "denim"] },
+    "sweaters": { "tier": "core",        "keywords": ["sweater", "knit", "shetland", "lambswool", "cardigan", "jumper", "crewneck", "pullover", "sweatshirt"] },
+    "belts":    { "tier": "core",        "keywords": ["belt"] },
+    "outerwear":{ "tier": "speculative", "keywords": ["jacket", "coat", "blazer", "parka", "vest", "gilet", "anorak", "harrington", "blouson"] },
+    "shoes":    { "tier": "speculative", "keywords": ["shoe", "loafer", "boot", "sneaker", "derby", "oxford shoe", "moccasin", "blucher"] }
+  },
+  "sizes": {
+    "shirts":   ["L", "LARGE", "16.5", "16 1/2", "42", "16.5/35", "16.5-35"],
+    "trousers": ["34", "36", "W34", "W36", "34/32", "36/32", "34R", "36R"],
+    "sweaters": ["L", "LARGE", "42", "44"],
+    "belts":    ["36", "38", "90", "95", "L", "LARGE"],
+    "outerwear":["L", "LARGE", "42", "44"],
+    "shoes":    ["10", "10.5", "11", "US10", "US10.5", "US11", "UK9", "UK9.5", "UK10", "44", "45"]
+  },
+  "size_note": "EDIT shoe sizes - placeholder. Trouser inseam variants included where retailers split them.",
+  "hard_excludes": {
+    "fit_keywords": ["slim", "skinny", "extra slim", "extra-slim", "muscle", "tapered slim", "super slim"],
+    "color_keywords_by_category": {
+      "shirts": ["black"]
+    },
+    "pattern_keywords": ["floral", "hawaiian", "leopard", "camo", "neon", "tie dye", "tie-dye", "graphic print", "logo print"]
+  },
+  "soft_prefer_colors": ["white", "blue", "navy", "stripe", "cream", "ecru", "olive", "grey", "gray", "tan", "khaki", "brown", "oatmeal"],
+  "style_brief": "Classic American trad / Ivy League menswear and quality Japanese or British takes on it. Wanted: oxford cloth button-down shirts (especially white, blue, university stripe), relaxed or classic fit chinos and trousers, shetland and lambswool sweaters, quality leather belts, honest outerwear (balmacaans, harringtons, field jackets, navy blazers), classic leather shoes (loafers, longwings, plain derbies). Muted palette: white, blue, navy, cream, olive, grey, tan, brown. NOT wanted: slim or skinny fits, streetwear, technical athleisure, loud patterns, black shirts, distressed anything, logo-heavy pieces, fashion-forward silhouettes.",
+  "score_threshold": 6,
+  "fx_target": "AUD",
+  "gst_threshold_aud": 1000,
+  "gst_rate": 0.10,
+  "resurface_drop_pct": 0.05
+}
