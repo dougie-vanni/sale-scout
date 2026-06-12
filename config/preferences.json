@@ -211,7 +211,7 @@
     "brown",
     "oatmeal"
   ],
-  "style_brief": "Classic American trad / Ivy League menswear and quality Japanese or British takes on it. Wanted: oxford cloth button-down shirts (especially white, blue, university stripe), relaxed or classic fit chinos and trousers, shetland and lambswool sweaters, quality leather belts, honest outerwear (balmacaans, harringtons, field jackets, navy blazers), classic leather shoes (loafers, longwings, plain derbies). Muted palette: white, blue, navy, cream, olive, grey, tan, brown. NOT wanted: slim or skinny fits, streetwear, technical athleisure, loud patterns, black shirts, distressed anything, logo-heavy pieces, fashion-forward silhouettes.",
+  "style_brief": "MENSWEAR ONLY. If the item is womenswear, a women's cut, unisex-fashion, or you are unsure it is a men's piece, score 0. Classic American trad / Ivy League menswear and quality Japanese or British takes on it. Wanted: oxford cloth button-down shirts (especially white, blue, university stripe), relaxed or classic fit chinos and trousers, shetland and lambswool sweaters, quality leather belts, honest outerwear (balmacaans, harringtons, field jackets, navy blazers), classic leather shoes (loafers, longwings, plain derbies). Muted palette: white, blue, navy, cream, olive, grey, tan, brown. NOT wanted: slim or skinny fits, streetwear, technical athleisure, loud patterns, black shirts, distressed anything, logo-heavy pieces, fashion-forward silhouettes. Also not wanted: anything from athletic or streetwear brands, hoodies, women's anything.",
   "score_threshold": 6,
   "fx_target": "AUD",
   "gst_threshold_aud": 1000,
