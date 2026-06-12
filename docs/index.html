@@ -336,26 +336,62 @@ const uiAlert  = m => modal({ msg: m, cancel: false });
 const uiConfirm = m => modal({ msg: m });
 const uiPrompt = m => modal({ msg: m, input: true });
 
-// ── sweep status badge ──
-async function loadStatus() {
-  const { data } = await sb.from('sweep_status').select('*').eq('id', 1).maybeSingle();
+// ── header: status badge + control buttons (single consistent render) ──
+async function renderHeader() {
+  const [cr, st] = await Promise.all([
+    sb.from('control').select('key,value'),
+    sb.from('sweep_status').select('*').eq('id', 1).maybeSingle(),
+  ]);
   const el = document.getElementById('sweepstate');
   const t = document.getElementById('sweepstate-t');
-  if (!data) { el.style.display = 'none'; return; }
-  el.style.display = '';
-  const ageMin = (Date.now() - new Date(data.updated_at).getTime()) / 60000;
-  let cls = data.state, txt = '';
-  if (data.state === 'running' && ageMin > 25) {
-    cls = 'stalled'; txt = 'sweep stalled? no heartbeat for ' + Math.round(ageMin) + 'm';
-  } else if (data.state === 'running') {
-    txt = 'sweeping: ' + (data.detail || '\u2026');
-  } else if (data.state === 'stopped') {
-    txt = 'sweep stopped \u2014 ' + (data.detail || '');
+  let running = false;
+  if (!st.data) {
+    el.style.display = 'none';
   } else {
-    txt = 'idle \u2014 last sweep: ' + (data.detail || 'never');
+    el.style.display = '';
+    const d = st.data;
+    const ageMin = (Date.now() - new Date(d.updated_at).getTime()) / 60000;
+    let cls = d.state, txt = '';
+    if (d.state === 'running' && ageMin > 25) {
+      cls = 'stalled'; txt = 'sweep stalled? no heartbeat for ' + Math.round(ageMin) + 'm';
+    } else if (d.state === 'running') {
+      running = true; txt = 'sweeping: ' + (d.detail || '\u2026');
+    } else if (d.state === 'stopped') {
+      txt = 'sweep stopped \u2014 ' + (d.detail || '');
+    } else {
+      txt = 'idle \u2014 last sweep: ' + (d.detail || 'never');
+    }
+    el.className = 'sub state ' + cls;
+    t.textContent = txt;
   }
-  el.className = 'sub state ' + cls;
-  t.textContent = txt;
+  if (cr.error || !cr.data || !cr.data.length) { controlsEl.hidden = true; return; }
+  controlsEl.hidden = false;
+  const c = Object.fromEntries(cr.data.map(r => [r.key, r.value]));
+  const tg = document.getElementById('c-toggle');
+  tg.textContent = 'Daily sweeps: ' + (c.sweeps_enabled ? 'ON' : 'OFF');
+  tg.className = 'cbtn ' + (c.sweeps_enabled ? 'on' : 'off');
+  tg.onclick = () => setFlag('sweeps_enabled', !c.sweeps_enabled);
+  const r = document.getElementById('c-run');
+  if (running) {
+    r.textContent = 'Sweeping\u2026'; r.disabled = true; r.onclick = null;
+  } else if (c.run_requested) {
+    r.textContent = 'Queued \u2014 cancel?'; r.disabled = false;
+    r.onclick = () => setFlag('run_requested', false);
+  } else {
+    r.textContent = 'Sweep now'; r.disabled = false;
+    r.onclick = () => setFlag('run_requested', true);
+  }
+  const sp = document.getElementById('c-stop');
+  sp.hidden = !running;
+  if (running) {
+    if (c.stop_requested) {
+      sp.textContent = 'Stopping\u2026 (cancel?)';
+      sp.onclick = () => setFlag('stop_requested', false);
+    } else {
+      sp.textContent = 'Stop sweep';
+      sp.onclick = () => setFlag('stop_requested', true);
+    }
+  }
 }
 
 // ── settings panel ──
@@ -490,34 +526,8 @@ async function loadSettings() {
   settingsEl.appendChild(sec3);
 }
 
-// ── sweep controls (control table in Supabase) ──
 const controlsEl = document.getElementById('controls');
-async function loadControls() {
-  const { data, error } = await sb.from('control').select('key,value');
-  if (error || !data || !data.length) { controlsEl.hidden = true; return; }
-  controlsEl.hidden = false;
-  const c = Object.fromEntries(data.map(r => [r.key, r.value]));
-  const t = document.getElementById('c-toggle');
-  t.textContent = 'Daily sweeps: ' + (c.sweeps_enabled ? 'ON' : 'OFF');
-  t.className = 'cbtn ' + (c.sweeps_enabled ? 'on' : 'off');
-  t.onclick = () => setFlag('sweeps_enabled', !c.sweeps_enabled);
-  const r = document.getElementById('c-run');
-  if (c.run_requested) {
-    r.textContent = 'Sweep queued\u2026'; r.disabled = true; r.onclick = null;
-    r.title = 'Starts within ~15 minutes';
-  } else {
-    r.textContent = 'Sweep now'; r.disabled = false;
-    r.onclick = () => setFlag('run_requested', true);
-  }
-  const st = document.getElementById('c-stop');
-  if (c.stop_requested) {
-    st.textContent = 'Stopping\u2026 (click to cancel)';
-    st.onclick = () => setFlag('stop_requested', false);
-  } else {
-    st.textContent = 'Stop sweep';
-    st.onclick = () => setFlag('stop_requested', true);
-  }
-}
+
 document.getElementById('c-reset').onclick = async () => {
   const phrase = 'reset';
   const typed = await uiPrompt(
@@ -545,14 +555,12 @@ async function setFlag(key, value) {
   } else {
     localStorage.setItem('salescout_pw', pw);
   }
-  loadControls();
+  renderHeader();
 }
 
 load();
-loadControls();
-loadStatus();
-setInterval(loadControls, 30000);
-setInterval(loadStatus, 10000);
+renderHeader();
+setInterval(renderHeader, 10000);
 </script>
 </body>
 </html>
