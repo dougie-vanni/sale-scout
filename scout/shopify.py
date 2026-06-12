@@ -53,6 +53,7 @@ def sale_candidates(retailer: dict) -> list[dict]:
                 "currency": retailer["currency"],
                 "product_id": str(p.get("id")),
                 "variant_id": str(v.get("id")),
+                "handle": p.get("handle", ""),
                 "title": p.get("title", ""),
                 "vendor": p.get("vendor", ""),
                 "product_type": p.get("product_type", ""),
@@ -65,3 +66,26 @@ def sale_candidates(retailer: dict) -> list[dict]:
                 "image": image,
             })
     return out
+
+
+_avail_cache: dict = {}
+
+
+def variant_available(c: dict, retailer: dict) -> bool:
+    """Verify stock via /products/<handle>.js — products.json often omits
+    the 'available' field, silently passing sold-out variants."""
+    ck = (retailer["id"], c.get("handle", ""))
+    if ck not in _avail_cache:
+        url = f"{retailer['base_url'].rstrip('/')}/products/{c.get('handle','')}.js"
+        try:
+            r = requests.get(url, headers=UA, timeout=20)
+            r.raise_for_status()
+            _avail_cache[ck] = {str(v.get("id")): bool(v.get("available", True))
+                                for v in r.json().get("variants", [])}
+            time.sleep(0.25)  # be polite
+        except Exception:
+            _avail_cache[ck] = None  # endpoint unavailable: don't drop items
+    m = _avail_cache[ck]
+    if m is None:
+        return True
+    return m.get(c["variant_id"], False)

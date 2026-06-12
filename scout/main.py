@@ -67,6 +67,8 @@ def main():
 
             if max_scores and scored >= max_scores:
                 continue  # cap hit: leave unscored for the next run
+            if not shopify.variant_available(c, retailer):
+                continue  # feed said in stock, product page says sold out
             if scored and scored % 20 == 0 and db.get_flag("stop_requested"):
                 stopped = True
                 break

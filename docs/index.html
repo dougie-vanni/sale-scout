@@ -94,6 +94,7 @@
     <button class="cbtn" id="c-toggle"></button>
     <button class="cbtn" id="c-run"></button>
     <button class="cbtn" id="c-stop"></button>
+    <button class="cbtn off" id="c-reset">Reset&hellip;</button>
   </div>
 </div></header>
 <nav role="tablist">
@@ -292,6 +293,19 @@ async function loadControls() {
     st.onclick = () => setFlag('stop_requested', true);
   }
 }
+document.getElementById('c-reset').onclick = async () => {
+  const phrase = 'reset';
+  const typed = prompt(
+    'This deletes EVERY item except your Saved ones, so the next sweep '
+    + 'rebuilds from scratch with current filters (costs some scoring credit).\n\n'
+    + `Type "${phrase}" to confirm:`);
+  if (typed !== phrase) return;
+  const { error } = await sb.from('items').delete().neq('status', 'approved');
+  if (error) { alert('Reset failed: ' + error.message
+    + '\n(Have you run the delete-policy SQL?)'); return; }
+  load();
+};
+
 async function setFlag(key, value) {
   const { error } = await sb.from('control')
     .update({ value, updated_at: new Date().toISOString() }).eq('key', key);
