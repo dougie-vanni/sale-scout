@@ -5,7 +5,7 @@ import requests
 
 class DB:
     def __init__(self):
-        self.url = os.environ["SUPABASE_URL"].rstrip("/")
+        self.url = os.environ["SUPABASE_URL"].rstrip("/").removesuffix("/rest/v1")
         key = os.environ["SUPABASE_SERVICE_KEY"]
         self.h = {
             "apikey": key,
