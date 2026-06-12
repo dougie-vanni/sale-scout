@@ -1,0 +1,46 @@
+exit_code=0
+--- last 60 lines ---
+DB: 923 known items, 0 muted retailers
+-> The Maple Store
+   2338 on-sale variants
+   227 pass rules
+-> Pickings & Parry
+   67 on-sale variants
+   7 pass rules
+-> Informale
+   0 on-sale variants
+   0 pass rules
+-> Double Monk
+   0 on-sale variants
+   0 pass rules
+-> Up There Store
+   8968 on-sale variants
+   148 pass rules
+-> Wythe
+   0 on-sale variants
+   0 pass rules
+-> Gitman Vintage
+   0 on-sale variants
+   0 pass rules
+-> Bill's Khakis
+   207 on-sale variants
+   52 pass rules
+-> Standard & Strange
+   480 on-sale variants
+   2 pass rules
+-> Lost & Found
+   738 on-sale variants
+   48 pass rules
+-> namu shop
+   517 on-sale variants
+   18 pass rules
+-> Drake's
+   0 on-sale variants
+   0 pass rules
+-> Clutch Cafe
+   56 on-sale variants
+   13 pass rules
+-> Trunk Clothiers
+   0 on-sale variants
+   0 pass rules
+Done. 0 new items surfaced (0 items scored this run).
