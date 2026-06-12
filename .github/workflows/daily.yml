@@ -32,7 +32,7 @@ jobs:
           EVENT: ${{ github.event_name }}
           CRON: ${{ github.event.schedule }}
         run: |
-          python3 - <<'PY' | tee -a "$GITHUB_OUTPUT"
+          python3 - <<'PY'
           import json, os, urllib.request
           url = os.environ["SUPABASE_URL"].rstrip("/")
           if url.endswith("/rest/v1"):
@@ -67,8 +67,9 @@ jobs:
                       run, why = "yes", "daily schedule (sweeps enabled)"
                   else:
                       why = "daily schedule, but sweeps are OFF on website"
-          print(f"run={run}")
-          print(f"# decision: {why}")
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write(f"run={run}\n")
+          print(f"decision: {why}")
           PY
       - uses: actions/setup-python@v5
         if: steps.decide.outputs.run == 'yes'
