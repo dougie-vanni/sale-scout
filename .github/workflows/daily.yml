@@ -48,7 +48,11 @@ jobs:
           event, cron = os.environ["EVENT"], os.environ.get("CRON", "")
           run, why = "no", "poll: nothing requested"
           if event == "workflow_dispatch":
-              run, why = "yes", "manual dispatch from GitHub"
+              run, why = "yes", "manual or instant dispatch"
+              try:
+                  req("PATCH", "/rest/v1/control?key=eq.run_requested", {"value": False})
+              except Exception:
+                  pass
           else:
               try:
                   flags = {x["key"]: x["value"] for x in
