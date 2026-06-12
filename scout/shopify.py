@@ -34,7 +34,7 @@ def sale_candidates(retailer: dict) -> list[dict]:
     out = []
     for p in fetch_products(retailer["base_url"]):
         image = (p.get("images") or [{}])[0].get("src", "")
-        url = f"{retailer['base_url'].rstrip('/')}/products/{p.get('handle','')}"
+        base_product_url = f"{retailer['base_url'].rstrip('/')}/products/{p.get('handle','')}"
         tags = " ".join(p.get("tags", [])) if isinstance(p.get("tags"), list) else str(p.get("tags", ""))
         for v in p.get("variants", []):
             try:
@@ -62,7 +62,7 @@ def sale_candidates(retailer: dict) -> list[dict]:
                 "price": price,
                 "compare_at": compare,
                 "discount_pct": round(1 - price / compare, 3),
-                "url": url,
+                "url": f"{base_product_url}?variant={v.get('id')}",
                 "image": image,
             })
     return out
