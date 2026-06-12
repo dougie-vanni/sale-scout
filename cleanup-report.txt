@@ -1,0 +1,9 @@
+## error-scored items
+HTTP/2 204 
+content-range: */74
+## womenswear by title
+HTTP/2 204 
+content-range: */1
+## excluded vendors / hoodies
+HTTP/2 204 
+content-range: */10
