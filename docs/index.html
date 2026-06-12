@@ -31,7 +31,19 @@
     border:none;border-bottom:3px solid transparent;padding:12px 14px;cursor:pointer;
     color:var(--ink);letter-spacing:.06em}
   nav button[aria-selected="true"]{border-bottom-color:var(--ink);font-weight:500}
-  nav button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+  nav button:focus-visible, .filter-chip:focus-visible, .clear-all:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+  .filterbar{max-width:1180px;margin:0 auto;padding:12px 20px 0;display:flex;gap:12px;
+    align-items:center;justify-content:space-between;flex-wrap:wrap}
+  .filters{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  .filter-chip{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;
+    letter-spacing:.10em;border:1px solid var(--rule);background:none;color:var(--ink);
+    padding:6px 8px;cursor:pointer}
+  .filter-chip[aria-pressed="true"]{border-color:var(--ink);background:var(--cream);font-weight:500}
+  .filter-chip .n{color:var(--brass);margin-left:4px}
+  .clear-all{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;
+    letter-spacing:.10em;border:1.5px solid var(--brick);color:var(--brick);background:none;
+    padding:7px 10px;cursor:pointer}
+  .clear-all:disabled{opacity:.45;cursor:default}
   main{max-width:1180px;margin:0 auto;padding:26px 20px 80px}
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:22px}
   .card{background:#fff;border:1px solid var(--rule);display:flex;flex-direction:column}
@@ -90,6 +102,10 @@
   <button role="tab" data-tab="rejected" aria-selected="false">Passed</button>
   <button role="tab" data-tab="too_expensive" aria-selected="false">Waiting on price</button>
 </nav>
+<div class="filterbar">
+  <div class="filters" id="category-filters" aria-label="Filter by garment type"></div>
+  <button class="clear-all" id="clear-all" hidden>Clear all</button>
+</div>
 <main><div class="grid" id="grid"></div><div class="empty" id="empty" hidden></div></main>
 
 <script type="module">
@@ -104,18 +120,37 @@ const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const grid = document.getElementById('grid');
 const empty = document.getElementById('empty');
 const count = document.getElementById('count');
+const filterEl = document.getElementById('category-filters');
+const clearAllBtn = document.getElementById('clear-all');
+const categories = [
+  ['all', 'All'], ['shirts', 'Shirts'], ['trousers', 'Trousers'],
+  ['sweaters', 'Sweaters'], ['outerwear', 'Outerwear'], ['shoes', 'Shoes'], ['belts', 'Belts']
+].map(([value, label]) => ({ value, label }));
+const categoryLabels = Object.fromEntries(categories.map(c => [c.value, c.label]));
 let tab = 'new';
+let categoryFilter = 'all';
+let currentTotal = 0;
+let categoryCounts = null;
 
 const aud = n => 'A$' + Number(n).toFixed(0);
 
 async function load() {
   grid.innerHTML = ''; empty.hidden = true;
-  const { data, error } = await sb.from('items').select('*')
-    .eq('status', tab).order('landed_discount_pct', { ascending: false }).limit(200);
+  currentTotal = 0; updateClearAll();
+  let query = sb.from('items').select('*', { count: 'exact' }).eq('status', tab);
+  if (categoryFilter !== 'all') query = query.eq('category', categoryFilter);
+  const [{ data, error, count: total }] = await Promise.all([
+    query.order('landed_discount_pct', { ascending: false }).limit(200),
+    loadCategoryCounts()
+  ]);
   if (error) { empty.textContent = 'Could not load items: ' + error.message; empty.hidden = false; return; }
-  count.textContent = `${data.length} item${data.length === 1 ? '' : 's'}`;
+  currentTotal = total ?? data.length;
+  updateClearAll();
+  count.textContent = data.length === currentTotal
+    ? `${currentTotal} item${currentTotal === 1 ? '' : 's'}`
+    : `${data.length} of ${currentTotal} items`;
   if (!data.length) {
-    empty.innerHTML = tab === 'new'
+    empty.innerHTML = categoryFilter === 'all' && tab === 'new'
       ? 'Nothing new today. The sweep runs each morning.<span class="sub">check back tomorrow</span>'
       : 'Nothing here yet.';
     empty.hidden = false; return;
@@ -153,13 +188,62 @@ function card(it) {
   return el;
 }
 
+function renderCategoryFilters() {
+  filterEl.innerHTML = categories.map(c => {
+    const n = categoryCounts && Number.isFinite(categoryCounts[c.value])
+      ? `<span class="n">${categoryCounts[c.value]}</span>` : '';
+    return `<button class="filter-chip" data-category="${esc(c.value)}" aria-pressed="${categoryFilter === c.value ? 'true' : 'false'}">${esc(c.label)}${n}</button>`;
+  }).join('');
+  filterEl.querySelectorAll('button').forEach(b => b.onclick = () => {
+    categoryFilter = b.dataset.category;
+    renderCategoryFilters();
+    load();
+  });
+}
+
+async function loadCategoryCounts() {
+  const { data, error, count: total } = await sb.from('items')
+    .select('category', { count: 'exact' }).eq('status', tab).limit(10000);
+  if (error || !data) { categoryCounts = null; renderCategoryFilters(); return; }
+  const counts = Object.fromEntries(categories.map(c => [c.value, 0]));
+  counts.all = total ?? data.length;
+  if (counts.all === data.length) {
+    for (const row of data) if (counts[row.category] !== undefined) counts[row.category] += 1;
+    categoryCounts = counts;
+  } else {
+    categoryCounts = { all: counts.all };
+  }
+  renderCategoryFilters();
+}
+
+function updateClearAll() {
+  const canClear = tab === 'new' || tab === 'too_expensive';
+  clearAllBtn.hidden = !canClear;
+  clearAllBtn.disabled = !canClear || currentTotal === 0;
+}
+
+async function clearAll() {
+  const targetTab = tab;
+  const targetCategory = categoryFilter;
+  const total = currentTotal;
+  if ((targetTab !== 'new' && targetTab !== 'too_expensive') || total === 0) return;
+  const tabLabel = targetTab === 'too_expensive' ? 'Waiting on price' : 'New';
+  const itemWord = total === 1 ? 'item' : 'items';
+  const scope = targetCategory === 'all'
+    ? `${total} ${itemWord} from the ${tabLabel} tab`
+    : `${total} ${itemWord} from ${categoryLabels[targetCategory]} in the ${tabLabel} tab`;
+  if (!confirm(`Clear ${scope}? This marks them as Passed, not deleted.`)) return;
+  let query = sb.from('items').update({ status: 'rejected' }).eq('status', targetTab);
+  if (targetCategory !== 'all') query = query.eq('category', targetCategory);
+  const { error } = await query;
+  if (error) { alert('Clear all failed: ' + error.message); return; }
+  load();
+}
+
 async function verdict(it, status, el) {
   const { error } = await sb.from('items').update({ status }).eq('item_key', it.item_key);
   if (error) { alert('Update failed: ' + error.message); return; }
-  el.remove();
-  const n = grid.children.length;
-  count.textContent = `${n} item${n === 1 ? '' : 's'}`;
-  if (!n) load();
+  load();
 }
 
 async function muteRetailer(it) {
@@ -177,6 +261,8 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   b.setAttribute('aria-selected', 'true');
   tab = b.dataset.tab; load();
 });
+clearAllBtn.onclick = clearAll;
+renderCategoryFilters();
 
 // ── sweep controls (control table in Supabase) ──
 const controlsEl = document.getElementById('controls');
