@@ -1,18 +1,26 @@
-exit_code=0
+exit_code=1
 --- last 60 lines ---
-DB: 5 known items, 0 muted retailers
--> The Maple Store
-   2335 on-sale variants
-   226 pass rules
-   + [7] Wide Chino Pants Light Grey (Waist 34) 30% off
-   + [7] COOLMAX Stripe Jersey L/S Tee Olive/Grey (Large) 30% off
-   + [7] Regular Collar S/S Shirt Natural (Large) 30% off
-   + [6] Crammond Shirt Oatmeal Golf Print (Large) 30% off
-   + [6] Dunn Polo Ecru/Green (Large) 30% off
-   + [7] Dunn Polo Ecru/Green (X-Large) 30% off
-   + [7] Fly T-Shirt Green/Ecru Knitted Stripe (Large) 30% off
-   + [7] Fly T-Shirt Green/Ecru Knitted Stripe (X-Large) 30% off
-   + [9] Original Shirt Natural (Large) 30% off
-   + [9] Original Shirt Natural (X-Large) 30% off
-STOPPED by website request; remainder deferred to next run.
-Done. 10 new items surfaced (20 items scored this run).
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/runner/work/sale-scout/sale-scout/scout/main.py", line 135, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/home/runner/work/sale-scout/sale-scout/scout/main.py", line 92, in main
+    row = _row(c, retailer, prefs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/sale-scout/sale-scout/scout/main.py", line 114, in _row
+    costs = landed.landed(c, retailer, prefs)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/sale-scout/sale-scout/scout/landed.py", line 32, in landed
+    ship = shipping_aud(retailer)
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/sale-scout/sale-scout/scout/landed.py", line 25, in shipping_aud
+    return float(retailer["shipping_aud"])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: float() argument must be a string or a real number, not 'NoneType'
+config source: database
+DB: 325 known items, 0 muted retailers
+-> Bill's Khakis
+   207 on-sale variants
+   52 pass rules
