@@ -18,10 +18,13 @@ def item_key(c: dict) -> str:
 
 
 def main():
-    prefs = load("preferences.json")
-    registry = load("retailers.json")["retailers"]
     db = DB()
+    db_prefs = db.get_preferences()
+    prefs = db_prefs or load("preferences.json")
+    registry = db.get_retailers() or load("retailers.json")["retailers"]
+    print(f"config source: {'database' if db_prefs else 'repo files'}")
     db.set_flag("stop_requested", False)  # clear any stale stop request
+    db.set_sweep_status("running", "starting")
     muted = db.muted_retailers()
     seen = db.existing_items()
     print(f"DB: {len(seen)} known items, {len(muted)} muted retailers")
@@ -39,6 +42,7 @@ def main():
         if retailer["type"] != "shopify":
             continue  # custom scrapers: future work
         print(f"-> {retailer['name']}")
+        db.set_sweep_status("running", retailer["name"])
         try:
             candidates = shopify.sale_candidates(retailer)
         except Exception as e:
@@ -95,9 +99,14 @@ def main():
 
     if stopped:
         db.set_flag("stop_requested", False)
+        db.set_sweep_status("stopped",
+            f"stopped by you; {new_count} new, {scored} scored")
         print("STOPPED by website request; remainder deferred to next run.")
     if max_scores and scored >= max_scores:
         print(f"NOTE: hit max_scores_per_run={max_scores}; remainder deferred to next run.")
+    if not stopped:
+        deferred = " (backlog remaining)" if max_scores and scored >= max_scores else ""
+        db.set_sweep_status("idle", f"{new_count} new, {scored} scored{deferred}")
     print(f"Done. {new_count} new items surfaced ({scored} items scored this run).")
 
 

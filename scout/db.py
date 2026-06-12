@@ -63,3 +63,31 @@ class DB:
                       json={"value": value}, timeout=30).raise_for_status()
         except Exception as e:
             print(f"  ! could not set flag {key}: {e}")
+
+    # ── website-editable config (fallback to repo files if tables absent) ──
+    def get_retailers(self) -> list | None:
+        try:
+            rows = self._get("retailers", {"select": "*", "order": "id"})
+            return rows if rows else None
+        except Exception:
+            return None
+
+    def get_preferences(self) -> dict | None:
+        try:
+            rows = self._get("preferences", {"select": "value", "key": "eq.main"})
+            return rows[0]["value"] if rows else None
+        except Exception:
+            return None
+
+    def set_sweep_status(self, state: str, detail: str = "") -> None:
+        import datetime
+        import requests as _rq
+        try:
+            _rq.patch(f"{self.url}/rest/v1/sweep_status", headers=self.h,
+                      params={"id": "eq.1"},
+                      json={"state": state, "detail": detail[:200],
+                            "updated_at": datetime.datetime.now(
+                                datetime.timezone.utc).isoformat()},
+                      timeout=30).raise_for_status()
+        except Exception as e:
+            print(f"  ! could not set sweep_status: {e}")
