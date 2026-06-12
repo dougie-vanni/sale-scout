@@ -290,9 +290,27 @@ async function clearAll() {
 }
 
 async function verdict(it, status, el) {
+  // optimistic: remove the card immediately, no grid re-render, keep scroll
+  el.style.transition = 'opacity .15s'; el.style.opacity = '0.35';
+  el.querySelectorAll('button').forEach(b => b.disabled = true);
   const { error } = await sb.from('items').update({ status }).eq('item_key', it.item_key);
-  if (error) { uiAlert('Update failed: ' + error.message); return; }
-  load();
+  if (error) {
+    el.style.opacity = ''; el.querySelectorAll('button').forEach(b => b.disabled = false);
+    uiAlert('Update failed: ' + error.message); return;
+  }
+  el.remove();
+  currentTotal = Math.max(0, currentTotal - 1);
+  updateClearAll();
+  const n = grid.children.length;
+  count.textContent = n === currentTotal
+    ? `${currentTotal} item${currentTotal === 1 ? '' : 's'}`
+    : `${n} of ${currentTotal} items`;
+  if (categoryCounts) {
+    if (Number.isFinite(categoryCounts.all)) categoryCounts.all -= 1;
+    if (Number.isFinite(categoryCounts[it.category])) categoryCounts[it.category] -= 1;
+    renderCategoryFilters();
+  }
+  if (!n) load();  // page exhausted: fetch the next batch / show empty state
 }
 
 async function muteRetailer(it) {
