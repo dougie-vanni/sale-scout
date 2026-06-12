@@ -86,6 +86,7 @@
   @keyframes pulse{50%{opacity:.35}}
   /* settings */
   #settings{display:flex;flex-direction:column;gap:34px;max-width:880px}
+  #settings[hidden]{display:none}
   #settings h2{font-size:22px;font-weight:600;border-bottom:1px solid var(--rule);padding-bottom:6px;margin-bottom:14px}
   .rtable{width:100%;border-collapse:collapse;font-size:15px}
   .rtable td,.rtable th{padding:7px 8px;border-bottom:1px solid var(--rule);text-align:left;vertical-align:middle}
@@ -456,12 +457,17 @@ async function loadSettings() {
       <label class="url">% &nbsp; min score</label><input id="pf-score" type="number" min="0" max="10" style="width:60px">
       <label class="url">max AI calls/run</label><input id="pf-cap" type="number" min="0" style="width:80px">
     </div>
+    <div class="frow" style="width:100%">
+      <label class="url">blocked brands</label>
+      <input id="pf-brands" style="flex:1;min-width:300px" placeholder="nike, adidas, ...">
+    </div>
     <button class="savebtn" id="pf-save">Save preferences</button><span class="savedmsg" id="pf-msg"></span>`;
   sec3.querySelector('#pf-brief').value = prefs.style_brief;
   sec3.querySelector('#pf-core').value = Math.round(prefs.discount_thresholds.core * 100);
   sec3.querySelector('#pf-spec').value = Math.round(prefs.discount_thresholds.speculative * 100);
   sec3.querySelector('#pf-score').value = prefs.score_threshold;
   sec3.querySelector('#pf-cap').value = prefs.max_scores_per_run ?? 300;
+  sec3.querySelector('#pf-brands').value = (prefs.hard_excludes.vendor_excludes || []).join(', ');
   sec3.querySelector('#pf-save').onclick = async () => {
     const v = structuredClone(prefs);
     for (const c of CATS) {
@@ -473,6 +479,8 @@ async function loadSettings() {
     v.discount_thresholds.speculative = (parseFloat(sec3.querySelector('#pf-spec').value) || 50) / 100;
     v.score_threshold = parseInt(sec3.querySelector('#pf-score').value) || 6;
     v.max_scores_per_run = parseInt(sec3.querySelector('#pf-cap').value) || 0;
+    v.hard_excludes.vendor_excludes = sec3.querySelector('#pf-brands').value
+      .toLowerCase().split(',').map(x => x.trim()).filter(Boolean);
     const { error } = await sb.from('preferences')
       .update({ value: v, updated_at: new Date().toISOString() }).eq('key', 'main');
     const msg = document.getElementById('pf-msg');
@@ -524,9 +532,19 @@ document.getElementById('c-reset').onclick = async () => {
 };
 
 async function setFlag(key, value) {
-  const { error } = await sb.from('control')
-    .update({ value, updated_at: new Date().toISOString() }).eq('key', key);
-  if (error) uiAlert('Failed: ' + error.message);
+  let pw = localStorage.getItem('salescout_pw');
+  if (!pw) {
+    pw = await uiPrompt('Control password:');
+    if (pw === null || pw === '') return;
+  }
+  const { error } = await sb.rpc('set_control', { k: key, v: value, pw });
+  if (error) {
+    localStorage.removeItem('salescout_pw');
+    uiAlert(/wrong password/i.test(error.message)
+      ? 'Wrong password.' : 'Failed: ' + error.message);
+  } else {
+    localStorage.setItem('salescout_pw', pw);
+  }
   loadControls();
 }
 
