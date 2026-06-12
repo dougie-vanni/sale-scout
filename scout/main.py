@@ -63,7 +63,10 @@ def main():
             if max_scores and scored >= max_scores:
                 continue  # cap hit: leave unscored for the next run
             scored += 1
-            score, reason = scorer.score_item(c, prefs["style_brief"])
+            result = scorer.score_item(c, prefs["style_brief"])
+            if result is None:
+                continue  # scoring failed; leave for a future run
+            score, reason = result
             if score < prefs["score_threshold"]:
                 # remember rejection so we never pay to score it again
                 db.upsert_item({**_row(c, retailer, prefs),
