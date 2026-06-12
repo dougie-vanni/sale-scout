@@ -1,0 +1,19 @@
+exit_code=1
+--- last 80 lines ---
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/runner/work/sale-scout/sale-scout/scout/main.py", line 103, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/home/runner/work/sale-scout/sale-scout/scout/main.py", line 24, in main
+    muted = db.muted_retailers()
+            ^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/sale-scout/sale-scout/scout/db.py", line 39, in muted_retailers
+    rows = self._get("muted_retailers", {"select": "retailer_id"})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/sale-scout/sale-scout/scout/db.py", line 20, in _get
+    r.raise_for_status()
+  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/requests/models.py", line 1167, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 404 Client Error: Not Found for url: https://gdckdtllocrkbilzyezv.supabase.co/rest/v1/rest/v1/muted_retailers?select=retailer_id
