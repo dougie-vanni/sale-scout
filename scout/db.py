@@ -46,3 +46,20 @@ class DB:
             params={"on_conflict": "item_key"},
             json=item, timeout=30)
         r.raise_for_status()
+
+    # ── sweep control flags (control table; tolerate table not existing) ──
+    def get_flag(self, key: str) -> bool:
+        try:
+            rows = self._get("control", {"select": "value", "key": f"eq.{key}"})
+            return bool(rows and rows[0]["value"])
+        except Exception:
+            return False
+
+    def set_flag(self, key: str, value: bool) -> None:
+        import requests as _rq
+        try:
+            _rq.patch(f"{self.url}/rest/v1/control", headers=self.h,
+                      params={"key": f"eq.{key}"},
+                      json={"value": value}, timeout=30).raise_for_status()
+        except Exception as e:
+            print(f"  ! could not set flag {key}: {e}")

@@ -60,6 +60,13 @@
     background:none;border:none;cursor:pointer;margin-top:8px;text-align:left;
     text-decoration:underline;padding:0}
   .empty{padding:70px 20px;text-align:center;font-style:italic;color:#5b6577}
+  .controls{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .cbtn{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;
+    border:1.5px solid var(--ink);color:var(--ink);background:none;
+    padding:6px 10px;cursor:pointer}
+  .cbtn:disabled{opacity:.45;cursor:default}
+  .cbtn.on{border-color:var(--green);color:var(--green)}
+  .cbtn.off{border-color:var(--brick);color:var(--brick)}
   .empty .sub{display:block;margin-top:10px}
   @media (prefers-reduced-motion:no-preference){
     .card{transition:transform .12s ease}
@@ -71,6 +78,11 @@
 <header><div class="masthead">
   <h1>SaleScout <em>&middot; gentleman&rsquo;s outfitting, discounted</em></h1>
   <span class="sub" id="count"></span>
+  <div class="controls" id="controls" hidden>
+    <button class="cbtn" id="c-toggle"></button>
+    <button class="cbtn" id="c-run"></button>
+    <button class="cbtn" id="c-stop"></button>
+  </div>
 </div></header>
 <nav role="tablist">
   <button role="tab" data-tab="new" aria-selected="true">New</button>
@@ -166,7 +178,44 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   tab = b.dataset.tab; load();
 });
 
+// ── sweep controls (control table in Supabase) ──
+const controlsEl = document.getElementById('controls');
+async function loadControls() {
+  const { data, error } = await sb.from('control').select('key,value');
+  if (error || !data || !data.length) { controlsEl.hidden = true; return; }
+  controlsEl.hidden = false;
+  const c = Object.fromEntries(data.map(r => [r.key, r.value]));
+  const t = document.getElementById('c-toggle');
+  t.textContent = 'Daily sweeps: ' + (c.sweeps_enabled ? 'ON' : 'OFF');
+  t.className = 'cbtn ' + (c.sweeps_enabled ? 'on' : 'off');
+  t.onclick = () => setFlag('sweeps_enabled', !c.sweeps_enabled);
+  const r = document.getElementById('c-run');
+  if (c.run_requested) {
+    r.textContent = 'Sweep queued\u2026'; r.disabled = true; r.onclick = null;
+    r.title = 'Starts within ~15 minutes';
+  } else {
+    r.textContent = 'Sweep now'; r.disabled = false;
+    r.onclick = () => setFlag('run_requested', true);
+  }
+  const st = document.getElementById('c-stop');
+  if (c.stop_requested) {
+    st.textContent = 'Stopping\u2026 (click to cancel)';
+    st.onclick = () => setFlag('stop_requested', false);
+  } else {
+    st.textContent = 'Stop sweep';
+    st.onclick = () => setFlag('stop_requested', true);
+  }
+}
+async function setFlag(key, value) {
+  const { error } = await sb.from('control')
+    .update({ value, updated_at: new Date().toISOString() }).eq('key', key);
+  if (error) alert('Failed: ' + error.message);
+  loadControls();
+}
+
 load();
+loadControls();
+setInterval(loadControls, 30000);
 </script>
 </body>
 </html>

@@ -21,14 +21,19 @@ def main():
     prefs = load("preferences.json")
     registry = load("retailers.json")["retailers"]
     db = DB()
+    db.set_flag("stop_requested", False)  # clear any stale stop request
     muted = db.muted_retailers()
     seen = db.existing_items()
     print(f"DB: {len(seen)} known items, {len(muted)} muted retailers")
 
     new_count = 0
     scored = 0
+    stopped = False
     max_scores = int(prefs.get("max_scores_per_run", 0))  # 0 = unlimited
     for retailer in registry:
+        if stopped or db.get_flag("stop_requested"):
+            stopped = True
+            break
         if not retailer.get("enabled") or retailer["id"] in muted:
             continue
         if retailer["type"] != "shopify":
@@ -62,6 +67,9 @@ def main():
 
             if max_scores and scored >= max_scores:
                 continue  # cap hit: leave unscored for the next run
+            if scored and scored % 20 == 0 and db.get_flag("stop_requested"):
+                stopped = True
+                break
             scored += 1
             result = scorer.score_item(c, prefs["style_brief"])
             if result is None:
@@ -83,6 +91,9 @@ def main():
             print(f"   + [{score}] {c['title']} ({c['variant_title']}) "
                   f"{c['discount_pct']:.0%} off")
 
+    if stopped:
+        db.set_flag("stop_requested", False)
+        print("STOPPED by website request; remainder deferred to next run.")
     if max_scores and scored >= max_scores:
         print(f"NOTE: hit max_scores_per_run={max_scores}; remainder deferred to next run.")
     print(f"Done. {new_count} new items surfaced ({scored} items scored this run).")
