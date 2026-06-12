@@ -32,6 +32,9 @@ def size_matches(c: dict, cat: str, prefs: dict) -> bool:
 def hard_excluded(c: dict, cat: str, prefs: dict) -> str | None:
     hay = _haystack(c)
     hx = prefs["hard_excludes"]
+    for kw in hx.get("gender_keywords", []):
+        if re.search(rf"\b{re.escape(kw)}\b", hay):
+            return f"gender:{kw}"
     for kw in hx["fit_keywords"]:
         if kw in hay:
             return f"fit:{kw}"

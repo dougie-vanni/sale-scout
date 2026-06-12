@@ -26,6 +26,8 @@ def main():
     print(f"DB: {len(seen)} known items, {len(muted)} muted retailers")
 
     new_count = 0
+    scored = 0
+    max_scores = int(prefs.get("max_scores_per_run", 0))  # 0 = unlimited
     for retailer in registry:
         if not retailer.get("enabled") or retailer["id"] in muted:
             continue
@@ -58,6 +60,9 @@ def main():
                 else:
                     continue  # already handled
 
+            if max_scores and scored >= max_scores:
+                continue  # cap hit: leave unscored for the next run
+            scored += 1
             score, reason = scorer.score_item(c, prefs["style_brief"])
             if score < prefs["score_threshold"]:
                 # remember rejection so we never pay to score it again
@@ -75,7 +80,9 @@ def main():
             print(f"   + [{score}] {c['title']} ({c['variant_title']}) "
                   f"{c['discount_pct']:.0%} off")
 
-    print(f"Done. {new_count} new items surfaced.")
+    if max_scores and scored >= max_scores:
+        print(f"NOTE: hit max_scores_per_run={max_scores}; remainder deferred to next run.")
+    print(f"Done. {new_count} new items surfaced ({scored} items scored this run).")
 
 
 def _row(c: dict, retailer: dict, prefs: dict) -> dict:
