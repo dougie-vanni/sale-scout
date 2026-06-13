@@ -1,34 +1,49 @@
 exit_code=0
 --- last 60 lines ---
-config source: database
-DB: 515 known items, 0 muted retailers
--> Bill's Khakis
-   207 on-sale variants
-   52 pass rules
--> Clutch Cafe
-   56 on-sale variants
-   13 pass rules
--> Double Monk
-   0 on-sale variants
-   0 pass rules
--> Drake's
-   0 on-sale variants
-   0 pass rules
--> Gitman Vintage
-   0 on-sale variants
-   0 pass rules
+   + [8] HENRY SARTORIAL Woven Driver BLUE (BLUE / 10 1/2) 58% off
+   + [8] HENRY SARTORIAL Calf Driving Shoes with Metal Trim BROWN (BROWN / 10) 58% off
+   + [9] HENRY SARTORIAL Casual Plain Shirt NAVY (NAVY / L) 59% off
+   + [6] HENRY SARTORIAL Casual Check Shirt MULTI (MULTI / L) 44% off
+   + [7] HENRY SARTORIAL Casual Cross Shirt BLUE (BLUE / L) 59% off
+   + [8] HENRY SARTORIAL Suede Driving Shoes TOBACCO (TOBACCO / 10) 57% off
+   + [8] HENRY SARTORIAL Casual Cross Shirt NAVY (NAVY / L) 59% off
+   + [8] HENRY SARTORIAL Classic Elastic Loafers BURGUNDY (BURGUNDY / 10) 58% off
+   + [8] HENRY SARTORIAL Classic Elastic Loafers BURGUNDY (BURGUNDY / 10 1/2) 58% off
+   + [8] HENRY SARTORIAL Classic Elastic Loafers BURGUNDY (BURGUNDY / 11) 58% off
+   + [8] HENRY SARTORIAL Short Sleeve Casual Shirt BLUE/WHITE (BLUE/WHITE / L) 47% off
+   + [7] HENRY SARTORIAL Short Sleeve Casual Shirt YELLOW/WHITE (YELLOW/WHITE / L) 47% off
+   + [9] HENRY SARTORIAL Cashmere Crew Neck CREAM (CREAM / L) 48% off
+   + [9] HENRY SARTORIAL V-Neck Jumper LIGHT BROWN (LIGHT BROWN / L) 54% off
 -> Informale
    0 on-sale variants
    0 pass rules
+-> J.Press
+   55 on-sale variants
+   0 pass rules
+-> Kamakura Shirts
+   68 on-sale variants
+   0 pass rules
+-> Christian Kimber
+   0 on-sale variants
+   0 pass rules
 -> Lost & Found
-   738 on-sale variants
-   48 pass rules
+   150 on-sale variants (after brand allowlist: 20 brands)
+   10 pass rules
 -> The Maple Store
-   2332 on-sale variants
-   226 pass rules
+   126 on-sale variants (after brand allowlist: 13 brands)
+   33 pass rules
+-> Mercer & Sons
+   0 on-sale variants
+   0 pass rules
+-> Modern Classics
+   72 on-sale variants
+   6 pass rules
+   + [8] Unfeigned Tailor Pants WR - Navy (Navy / 36) 60% off
+   + [8] Unfeigned Tailor Pants WR - Mud (Mud / 36) 60% off
+   + [6] Brotherwolf Kelp Long Sleeve Shirt - Brown (Brown / L) 60% off
 -> namu shop
-   515 on-sale variants
-   18 pass rules
+   17 on-sale variants (after brand allowlist: 6 brands)
+   1 pass rules
 -> Pickings & Parry
    67 on-sale variants
    7 pass rules
@@ -39,9 +54,9 @@ DB: 515 known items, 0 muted retailers
    0 on-sale variants
    0 pass rules
 -> Up There Store
-   8964 on-sale variants
-   147 pass rules
+   184 on-sale variants (after brand allowlist: 10 brands)
+   12 pass rules
 -> Wythe
    0 on-sale variants
    0 pass rules
-Done. 0 new items surfaced (0 items scored this run).
+Done. 19 new items surfaced (22 items scored this run).
