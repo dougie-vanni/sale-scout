@@ -1,26 +1,47 @@
-exit_code=1
+exit_code=0
 --- last 60 lines ---
-Traceback (most recent call last):
-  File "<frozen runpy>", line 198, in _run_module_as_main
-  File "<frozen runpy>", line 88, in _run_code
-  File "/home/runner/work/sale-scout/sale-scout/scout/main.py", line 135, in <module>
-    sys.exit(main())
-             ^^^^^^
-  File "/home/runner/work/sale-scout/sale-scout/scout/main.py", line 92, in main
-    row = _row(c, retailer, prefs)
-          ^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/sale-scout/sale-scout/scout/main.py", line 114, in _row
-    costs = landed.landed(c, retailer, prefs)
-            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/sale-scout/sale-scout/scout/landed.py", line 32, in landed
-    ship = shipping_aud(retailer)
-           ^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/sale-scout/sale-scout/scout/landed.py", line 25, in shipping_aud
-    return float(retailer["shipping_aud"])
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-TypeError: float() argument must be a string or a real number, not 'NoneType'
 config source: database
-DB: 325 known items, 0 muted retailers
+DB: 515 known items, 0 muted retailers
 -> Bill's Khakis
    207 on-sale variants
    52 pass rules
+-> Clutch Cafe
+   56 on-sale variants
+   13 pass rules
+-> Double Monk
+   0 on-sale variants
+   0 pass rules
+-> Drake's
+   0 on-sale variants
+   0 pass rules
+-> Gitman Vintage
+   0 on-sale variants
+   0 pass rules
+-> Informale
+   0 on-sale variants
+   0 pass rules
+-> Lost & Found
+   738 on-sale variants
+   48 pass rules
+-> The Maple Store
+   2332 on-sale variants
+   226 pass rules
+-> namu shop
+   515 on-sale variants
+   18 pass rules
+-> Pickings & Parry
+   67 on-sale variants
+   7 pass rules
+-> Standard & Strange
+   480 on-sale variants
+   2 pass rules
+-> Trunk Clothiers
+   0 on-sale variants
+   0 pass rules
+-> Up There Store
+   8964 on-sale variants
+   147 pass rules
+-> Wythe
+   0 on-sale variants
+   0 pass rules
+Done. 0 new items surfaced (0 items scored this run).
