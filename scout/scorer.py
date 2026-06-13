@@ -16,11 +16,18 @@ def _prompt(c: dict, brief: str) -> list:
     content = []
     if c.get("image"):
         content.append({"type": "image", "source": {"type": "url", "url": c["image"]}})
+    if c.get("vintage"):
+        vintage_note = (
+            f" This is a secondhand/vintage item priced at {c.get('currency', 'AUD')} {c.get('price', 0):.0f}."
+            " Also consider value: is this a good price relative to what it costs new?"
+        )
+    else:
+        vintage_note = ""
     content.append({"type": "text", "text": (
         f"Style brief:\n{brief}\n\n"
         f"Item: {c['title']}\nBrand: {c['vendor']}\nType: {c['product_type']}\n"
         f"Tags: {c['tags'][:300]}\n\n"
-        "Score 0-10 how well this item fits the style brief (10 = perfect fit). "
+        f"Score 0-10 how well this item fits the style brief (10 = perfect fit).{vintage_note} "
         "Judge the image if provided: fit/silhouette, pattern loudness, colour. "
         'Respond with ONLY JSON: {"score": <int>, "reason": "<max 12 words>"}'
     )})

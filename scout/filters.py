@@ -25,8 +25,17 @@ def _norm_tokens(s: str) -> set[str]:
 def size_matches(c: dict, cat: str, prefs: dict) -> bool:
     wanted = {w.upper() for w in prefs["sizes"].get(cat, [])}
     tokens = _norm_tokens(c["variant_title"])
-    # whole variant string match too (e.g. "16.5/35")
-    return bool(wanted & tokens) or c["variant_title"].upper().strip() in wanted
+    if bool(wanted & tokens) or c["variant_title"].upper().strip() in wanted:
+        return True
+    # For vintage items with single "Default Title" variants, scan the item title
+    # using word boundaries to avoid "L" in "Lauren" matching size L
+    if c.get("vintage") and c["variant_title"].upper().strip() in ("DEFAULT TITLE", ""):
+        pattern = re.compile(
+            r'\b(' + '|'.join(re.escape(w) for w in wanted) + r')\b',
+            re.IGNORECASE
+        )
+        return bool(pattern.search(c["title"]))
+    return False
 
 
 def hard_excluded(c: dict, cat: str, prefs: dict) -> str | None:
@@ -56,10 +65,12 @@ def passes_rules(c: dict, prefs: dict) -> tuple[bool, str, str]:
     cat = categorize(c, prefs)
     if not cat:
         return False, "", "no category"
-    tier = prefs["categories"][cat]["tier"]
-    threshold = prefs["discount_thresholds"][tier]
-    if c["discount_pct"] < threshold:
-        return False, cat, f"discount {c['discount_pct']:.0%} < {threshold:.0%}"
+    # Vintage items have no discount — skip the discount threshold check
+    if not c.get("vintage"):
+        tier = prefs["categories"][cat]["tier"]
+        threshold = prefs["discount_thresholds"][tier]
+        if c["discount_pct"] < threshold:
+            return False, cat, f"discount {c['discount_pct']:.0%} < {threshold:.0%}"
     if not size_matches(c, cat, prefs):
         return False, cat, "size unavailable"
     ex = hard_excluded(c, cat, prefs)

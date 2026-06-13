@@ -30,7 +30,8 @@ def fetch_products(base_url: str) -> list[dict]:
 
 
 def sale_candidates(retailer: dict) -> list[dict]:
-    """Normalize on-sale, in-stock variants into candidate dicts."""
+    """Normalize on-sale (or all vintage) in-stock variants into candidate dicts."""
+    vintage = retailer.get("vintage", False)
     out = []
     for p in fetch_products(retailer["base_url"]):
         image = (p.get("images") or [{}])[0].get("src", "")
@@ -42,10 +43,20 @@ def sale_candidates(retailer: dict) -> list[dict]:
                 compare = float(v.get("compare_at_price") or 0)
             except (TypeError, ValueError):
                 continue
-            if not (compare > price > 0):
-                continue  # not on sale
-            if v.get("available") is False:
-                continue
+            if vintage:
+                if not price > 0:
+                    continue
+                if v.get("available") is False:
+                    continue
+                # No compare_at_price on vintage items; scorer assesses value vs RRP
+                compare = price
+                discount_pct = 0.0
+            else:
+                if not (compare > price > 0):
+                    continue  # not on sale
+                if v.get("available") is False:
+                    continue
+                discount_pct = round(1 - price / compare, 3)
             out.append({
                 "retailer_id": retailer["id"],
                 "retailer_name": retailer["name"],
@@ -61,9 +72,10 @@ def sale_candidates(retailer: dict) -> list[dict]:
                 "variant_title": v.get("title", ""),
                 "price": price,
                 "compare_at": compare,
-                "discount_pct": round(1 - price / compare, 3),
+                "discount_pct": discount_pct,
                 "url": f"{base_product_url}?variant={v.get('id')}",
                 "image": image,
+                "vintage": vintage,
             })
     return out
 
@@ -72,7 +84,7 @@ _avail_cache: dict = {}
 
 
 def variant_available(c: dict, retailer: dict) -> bool:
-    """Verify stock via /products/<handle>.js — products.json often omits
+    """Verify stock via /products/<handle>.js -- products.json often omits
     the 'available' field, silently passing sold-out variants."""
     ck = (retailer["id"], c.get("handle", ""))
     if ck not in _avail_cache:

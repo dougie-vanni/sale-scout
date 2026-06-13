@@ -238,6 +238,61 @@
       "shipping_usd": 35,
       "enabled": false,
       "note": "Custom scraper TODO"
+    },
+    {
+      "id": "providence",
+      "name": "Providence Clothing Co",
+      "region": "AU",
+      "type": "shopify",
+      "base_url": "https://providenceclothingco.com.au",
+      "currency": "AUD",
+      "shipping_aud": 10,
+      "enabled": true
+    },
+    {
+      "id": "styleroom",
+      "name": "Styleroom",
+      "region": "AU",
+      "type": "shopify",
+      "base_url": "https://www.styleroom.com.au",
+      "currency": "AUD",
+      "shipping_aud": 10,
+      "enabled": true
+    },
+    {
+      "id": "vintagemarketplace",
+      "name": "Vintage Marketplace",
+      "region": "AU",
+      "type": "shopify",
+      "base_url": "https://vintagemarketplace.com.au",
+      "currency": "AUD",
+      "shipping_aud": 10,
+      "enabled": true,
+      "vintage": true,
+      "vendor_allow": "polo ralph lauren, ralph lauren, tommy hilfiger, brooks brothers, lacoste, pendleton, woolrich, izod, j.crew"
+    },
+    {
+      "id": "midwesttrader",
+      "name": "Midwest Trader",
+      "region": "AU",
+      "type": "shopify",
+      "base_url": "https://midwesttrader.shop",
+      "currency": "AUD",
+      "shipping_aud": 10,
+      "enabled": true,
+      "vintage": true
+    },
+    {
+      "id": "retrostar",
+      "name": "RetroStar",
+      "region": "AU",
+      "type": "shopify",
+      "base_url": "https://retrostar.com.au",
+      "currency": "AUD",
+      "shipping_aud": 10,
+      "enabled": true,
+      "vintage": true,
+      "vendor_allow": "polo ralph lauren, ralph lauren, tommy hilfiger, brooks brothers, lacoste, pendleton, woolrich, izod, j.crew, lands end, l.l. bean"
     }
   ]
 }
