@@ -48,7 +48,12 @@ def main():
         except Exception as e:
             print(f"  ! retailer failed entirely: {e}")
             continue
-        print(f"   {len(candidates)} on-sale variants")
+        allow = [a.strip().lower() for a in (retailer.get("vendor_allow") or "").split(",") if a.strip()]
+        if allow:
+            candidates = [c for c in candidates
+                          if c.get("vendor", "").strip().lower() in allow]
+        print(f"   {len(candidates)} on-sale variants"
+              + (f" (after brand allowlist: {len(allow)} brands)" if allow else ""))
 
         kept = []
         for c in candidates:

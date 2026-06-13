@@ -436,7 +436,7 @@ async function loadSettings() {
   const sec1 = document.createElement('section');
   sec1.innerHTML = '<h2>Retailers</h2>';
   const tbl = document.createElement('table'); tbl.className = 'rtable';
-  tbl.innerHTML = '<tr><th>on</th><th>name</th><th>region</th><th>store</th><th></th></tr>';
+  tbl.innerHTML = '<tr><th>on</th><th>name</th><th>region</th><th>store</th><th>only these brands <span class="url">(blank = all)</span></th><th></th></tr>';
   for (const r of rets) {
     const tr = document.createElement('tr');
     if (!r.enabled) tr.className = 'off-row';
@@ -446,7 +446,17 @@ async function loadSettings() {
         ${muted.has(r.id) ? ' <span class="url">[muted]</span>' : ''}</td>
       <td>${esc(r.region)}</td>
       <td class="url">${esc(r.base_url)}</td>
+      <td><input class="va" value="${esc(r.vendor_allow || '')}" placeholder="all brands"
+        style="width:100%;font-family:'IBM Plex Mono',monospace;font-size:11px;padding:5px;border:1px solid var(--rule)"></td>
       <td><button class="xbtn" title="Remove">\u2715</button></td>`;
+    const vaInput = tr.querySelector('.va');
+    vaInput.onchange = async () => {
+      const v = vaInput.value.trim().toLowerCase() || null;
+      const { error } = await sb.from('retailers').update({ vendor_allow: v }).eq('id', r.id);
+      if (error) { uiAlert('Failed: ' + error.message); return; }
+      vaInput.style.borderColor = 'var(--green)';
+      setTimeout(() => vaInput.style.borderColor = '', 1200);
+    };
     tr.querySelector('.sw').onchange = async e => {
       const { error } = await sb.from('retailers').update({ enabled: e.target.checked }).eq('id', r.id);
       if (error) { uiAlert('Failed: ' + error.message); return; }
