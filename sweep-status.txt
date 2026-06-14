@@ -1,12 +1,62 @@
 exit_code=0
 --- last 60 lines ---
-config source: database
-DB: 653 known items, 0 muted retailers
--> Bill's Khakis
-   206 on-sale variants
-   52 pass rules
--> Clutch Cafe
+   764 on-sale variants (after brand allowlist: 9 brands)
+   15 pass rules
+-> Informale
+   0 on-sale variants
+   0 pass rules
+-> J.Press
    55 on-sale variants
+   0 pass rules
+-> Kamakura Shirts
+   68 on-sale variants
+   0 pass rules
+-> Christian Kimber
+   0 on-sale variants
+   0 pass rules
+-> Lost & Found
+   148 on-sale variants (after brand allowlist: 20 brands)
+   10 pass rules
+-> The Maple Store
+   123 on-sale variants (after brand allowlist: 13 brands)
+   31 pass rules
+-> Mercer & Sons
+   0 on-sale variants
+   0 pass rules
+-> Midwest Trader
+   304 on-sale variants
+   28 pass rules
+-> Modern Classics
+   72 on-sale variants
+   6 pass rules
+-> namu shop
+   17 on-sale variants (after brand allowlist: 6 brands)
+   1 pass rules
+-> Pickings & Parry
+   66 on-sale variants
+   6 pass rules
+-> Providence Clothing Co
+   726 on-sale variants
+   15 pass rules
+-> RetroStar
+   254 on-sale variants (after brand allowlist: 11 brands)
+   0 pass rules
+-> Standard & Strange
+   479 on-sale variants
+   2 pass rules
+-> Styleroom
+   851 on-sale variants
+   60 pass rules
+-> Trunk Clothiers
+   0 on-sale variants
+   0 pass rules
+-> Up There Store
+   184 on-sale variants (after brand allowlist: 10 brands)
+   12 pass rules
+-> Vintage Marketplace
+   101 on-sale variants (after brand allowlist: 9 brands)
    13 pass rules
-STOPPED by website request; remainder deferred to next run.
+-> Wythe
+   0 on-sale variants
+   0 pass rules
 Done. 0 new items surfaced (0 items scored this run).
