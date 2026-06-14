@@ -1,9 +1,5 @@
 exit_code=0
 --- last 60 lines ---
-   764 on-sale variants (after brand allowlist: 9 brands)
-   15 pass rules
--> Informale
-   0 on-sale variants
    0 pass rules
 -> J.Press
    55 on-sale variants
@@ -18,8 +14,8 @@ exit_code=0
    148 on-sale variants (after brand allowlist: 20 brands)
    10 pass rules
 -> The Maple Store
-   123 on-sale variants (after brand allowlist: 13 brands)
-   31 pass rules
+   122 on-sale variants (after brand allowlist: 13 brands)
+   30 pass rules
 -> Mercer & Sons
    0 on-sale variants
    0 pass rules
@@ -33,10 +29,10 @@ exit_code=0
    17 on-sale variants (after brand allowlist: 6 brands)
    1 pass rules
 -> Pickings & Parry
-   66 on-sale variants
+   65 on-sale variants
    6 pass rules
 -> Providence Clothing Co
-   726 on-sale variants
+   728 on-sale variants
    15 pass rules
 -> RetroStar
    254 on-sale variants (after brand allowlist: 11 brands)
@@ -59,4 +55,8 @@ exit_code=0
 -> Wythe
    0 on-sale variants
    0 pass rules
+Updating style brief from verdicts...
+  Rewriting style brief with Sonnet (78 saves, 30 passes)...
+  ✓ Style brief updated (saves: 0 → 78)
+    MENSWEAR ONLY. Classic American trad and Ivy League menswear with strong Japanese and British workwear-inflected takes: prioritise oxford cloth and poplin button-down shirts (white, cream, light blue,...
 Done. 0 new items surfaced (0 items scored this run).
