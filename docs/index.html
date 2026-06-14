@@ -140,6 +140,7 @@
 </div></header>
 <nav role="tablist">
   <button role="tab" data-tab="new" aria-selected="true">New</button>
+  <button role="tab" data-tab="vintage" aria-selected="false">Vintage</button>
   <button role="tab" data-tab="approved" aria-selected="false">Saved</button>
   <button role="tab" data-tab="rejected" aria-selected="false">Passed</button>
   <button role="tab" data-tab="too_expensive" aria-selected="false">Waiting on price</button>
@@ -186,7 +187,10 @@ async function load() {
   settingsEl.hidden = true;
   grid.innerHTML = ''; empty.hidden = true;
   currentTotal = 0; updateClearAll();
-  let query = sb.from('items').select('*', { count: 'exact' }).eq('status', tab);
+  let status = tab === 'vintage' ? 'new' : tab;
+  let query = sb.from('items').select('*', { count: 'exact' }).eq('status', status);
+  if (tab === 'vintage') query = query.eq('vintage', true);
+  else if (tab === 'new') query = query.or('vintage.is.null,vintage.eq.false');
   if (categoryFilter !== 'all') query = query.eq('category', categoryFilter);
   const [{ data, error, count: total }] = await Promise.all([
     query.order('landed_discount_pct', { ascending: false }).limit(200),
@@ -220,19 +224,28 @@ function card(it) {
         <span class="chip">&minus;${Math.round(it.landed_discount_pct * 100)}%</span></div>
       <span class="landed">landed: item ${aud(it.price_aud)} + ship ${aud(it.shipping_aud)}${it.gst_aud > 0 ? ' + GST ' + aud(it.gst_aud) : ''}</span>
       ${it.score_reason ? `<span class="reason">${esc(it.score_reason)}</span>` : ''}
-      ${tab === 'new' ? `
+      ${tab === 'new' || tab === 'vintage' ? `
       <div class="actions">
         <button class="b-want">Want it</button>
         <button class="b-pass">Pass</button>
         <button class="b-cheap">Cheaper</button>
       </div>
       <button class="mute">Mute ${esc(it.retailer_name)}</button>` : ''}
+      ${tab === 'approved' ? `
+      <div class="actions">
+        <button class="b-bought">Bought it</button>
+        <button class="b-pass">Pass</button>
+      </div>` : ''}
     </div>`;
-  if (tab === 'new') {
+  if (tab === 'new' || tab === 'vintage') {
     el.querySelector('.b-want').onclick = () => verdict(it, 'approved', el);
     el.querySelector('.b-pass').onclick = () => verdict(it, 'rejected', el);
     el.querySelector('.b-cheap').onclick = () => verdict(it, 'too_expensive', el);
     el.querySelector('.mute').onclick = () => muteRetailer(it);
+  }
+  if (tab === 'approved') {
+    el.querySelector('.b-bought').onclick = () => verdict(it, 'purchased', el);
+    el.querySelector('.b-pass').onclick = () => verdict(it, 'rejected', el);
   }
   return el;
 }
@@ -251,8 +264,11 @@ function renderCategoryFilters() {
 }
 
 async function loadCategoryCounts() {
-  const { data, error, count: total } = await sb.from('items')
-    .select('category', { count: 'exact' }).eq('status', tab).limit(10000);
+  const _ccStatus = tab === 'vintage' ? 'new' : tab;
+  let _ccQuery = sb.from('items').select('category', { count: 'exact' }).eq('status', _ccStatus);
+  if (tab === 'vintage') _ccQuery = _ccQuery.eq('vintage', true);
+  else if (tab === 'new') _ccQuery = _ccQuery.or('vintage.is.null,vintage.eq.false');
+  const { data, error, count: total } = await _ccQuery.limit(10000);
   if (error || !data) { categoryCounts = null; renderCategoryFilters(); return; }
   const counts = Object.fromEntries(categories.map(c => [c.value, 0]));
   counts.all = total ?? data.length;
@@ -266,7 +282,7 @@ async function loadCategoryCounts() {
 }
 
 function updateClearAll() {
-  const canClear = tab === 'new' || tab === 'too_expensive';
+  const canClear = tab === 'new' || tab === 'vintage' || tab === 'too_expensive';
   clearAllBtn.hidden = !canClear;
   clearAllBtn.disabled = !canClear || currentTotal === 0;
 }
@@ -276,13 +292,16 @@ async function clearAll() {
   const targetCategory = categoryFilter;
   const total = currentTotal;
   if ((targetTab !== 'new' && targetTab !== 'too_expensive') || total === 0) return;
-  const tabLabel = targetTab === 'too_expensive' ? 'Waiting on price' : 'New';
+  const tabLabel = targetTab === 'too_expensive' ? 'Waiting on price' : targetTab === 'vintage' ? 'Vintage' : 'New';
   const itemWord = total === 1 ? 'item' : 'items';
   const scope = targetCategory === 'all'
     ? `${total} ${itemWord} from the ${tabLabel} tab`
     : `${total} ${itemWord} from ${categoryLabels[targetCategory]} in the ${tabLabel} tab`;
   if (!await uiConfirm(`Clear ${scope}? This marks them as Passed, not deleted.`)) return;
-  let query = sb.from('items').update({ status: 'rejected' }).eq('status', targetTab);
+  const clearStatus = targetTab === 'vintage' ? 'new' : targetTab;
+  let query = sb.from('items').update({ status: 'rejected' }).eq('status', clearStatus);
+  if (targetTab === 'vintage') query = query.eq('vintage', true);
+  else if (targetTab === 'new') query = query.or('vintage.is.null,vintage.eq.false');
   if (targetCategory !== 'all') query = query.eq('category', targetCategory);
   const { error } = await query;
   if (error) { uiAlert('Clear all failed: ' + error.message); return; }

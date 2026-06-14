@@ -138,6 +138,7 @@ def _row(c: dict, retailer: dict, prefs: dict) -> dict:
         "discount_pct": c["discount_pct"],
         "url": c["url"],
         "image": c["image"],
+        "vintage": c.get("vintage", False),
         **costs,
     }
 
