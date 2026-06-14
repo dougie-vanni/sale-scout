@@ -1,12 +1,5 @@
-exit_code=1
+exit_code=0
 --- last 60 lines ---
-   0 on-sale variants
-   0 pass rules
--> Midwest Trader
-   304 on-sale variants
-   28 pass rules
--> Modern Classics
-   72 on-sale variants
    6 pass rules
 -> namu shop
    17 on-sale variants (after brand allowlist: 6 brands)
@@ -17,46 +10,53 @@ exit_code=1
 -> Providence Clothing Co
    726 on-sale variants
    15 pass rules
-   + [7] 80s Painter Pant - Olive Twill (36) 40% off
-   + [6] SS Painter Shirt - Washed Red (L) 50% off
-   + [6] Organic Cotton Corduroy Jeans - Coriander Brown (36 / 32) 31% off
-   + [8] Jungle Jacket - Khaki (L) 53% off
-   + [8] Double Pleated Trouser - Blue Braided Weave (34) 52% off
-   + [8] Double Pleated Trouser - Blue Braided Weave (36) 52% off
-   + [7] Ryder Trouser - Insignia Blue Textured Jacquard (34) 66% off
 -> RetroStar
-   0 on-sale variants (after brand allowlist: 11 brands)
+   254 on-sale variants (after brand allowlist: 11 brands)
    0 pass rules
 -> Standard & Strange
-   480 on-sale variants
+   479 on-sale variants
    2 pass rules
 -> Styleroom
    851 on-sale variants
    60 pass rules
-   + [7] Paul&Shark Extra Soft Cotton Interlock Shirt (Navy / 42) 50% off
-   + [7] Paul&Shark Long Sleeve Check Cotton Shirt (Navy Check / 42) 50% off
-   + [7] Paul&Shark Wool Cashmere Typhoon Platinum Reversible Vest (Eiffel Tower / L) 50% off
-   + [7] Paul&Shark Linen Long Sleeve Stripe Shirt (Blue Stripe / 42) 40% off
-   + [7] Paul&Shark Linen Long Sleeve Stripe Shirt (Aqua Blue/White Stripe / 42) 40% off
-   + [7] Paul&Shark Linen Long Sleeve Stripe Shirt (Orange/White Stripe / 42) 40% off
-   + [7] Paul&Shark Long Sleeve Pure Linen Shirt (Aqua Blue / 42) 40% off
-   + [7] Paul&Shark Long Sleeve Pure Linen Shirt (White / 42) 40% off
-   + [7] Paul&Shark Long Sleeve Pure Linen Shirt (Orange / 42) 40% off
-   + [8] Tintoria Mattei 954 Wool Blend Long Sleeve Overshirt (Grey / L) 40% off
-   + [7] Tintoria Mattei 954 Stripe Cotton Linen Blend Shirt (Pastel Pink / 42) 30% off
-   + [7] Tintoria Mattei 954 Stripe Cotton Linen Blend Shirt (Turquoise / 42) 30% off
-   + [8] Tintoria Mattei 954 Stripe Linen Cotton Blend Shirt (Multi Stripe / 42) 30% off
-   + [7] Primo Emporio Ribbed Long Sleeve Crew Neck Knit (Grey / L) 40% off
-   + [7] Primo Emporio Ribbed Long Sleeve Crew Neck Knit (Black / L) 40% off
-   + [9] Primo Emporio Cotton Blend Long Sleeve Button Down Shirt (White / L) 40% off
-   + [9] Primo Emporio Cotton Blend Long Sleeve Button Down Shirt (Blue / L) 40% off
-   + [6] Marina Yachting Winter Puffer Jacket (Black / L) 55% off
-   + [7] HUGO BOSS Embossed Leather Slip-On Moccasins with Logo Detail (Dark Brown / 44) 50% off
-   + [6] HUGO BOSS Regular-Fit Wool Cotton Blend Cardigan (Dark Beige / L) 50% off
-   + [8] Gardeur Organic Corduroy Bill-3 Trouser (Ice Grey / 40 / 34) 40% off
-   + [8] Gardeur Organic Corduroy Bill-3 Trouser (Buttermilk / 42 / 34) 40% off
-   + [7] g1920 Comfort Stretch Saxton Denim Jean (Dark Stone Used / 34 / 32) 40% off
-   + [7] g1920 Comfort Stretch Saxton Denim Jean (Dark Stone Used / 34 / 34) 40% off
-   + [7] g1920 Comfort Stretch Saxton Denim Jean (Dark Stone Used / 36 / 32) 40% off
-   + [7] g1920 Comfort Stretch Saxton Denim Jean (Dark Stone Used / 36 / 34) 40% off
-   + [8] g1920 Soft Touch Subway Trouser (Dune / 38 / 34) 40% off
+   + [6] Gardeur Move Lite Batu-4 Denim Jean (Anthrazit / 34 / 34) 40% off
+   + [6] Gardeur Move Lite Batu-4 Denim Jean (Anthrazit / 40 / 34) 40% off
+   + [8] Gardeur Houndstooth Wool Savage-2 Trouser (Quit Shade / 34 / 34) 40% off
+   + [7] Gardeur Iconic Khakis Modern Fit Benito Trouser (Navy / 36 / 34) 40% off
+   + [7] Gardeur Iconic Khakis Modern Fit Benito Trouser (Navy / 40 / 34) 40% off
+   + [7] Gardeur TonicBF 4Nature Tencel™️ Trouser (Cream / 34 / 32) 40% off
+   + [7] Gardeur TonicBF 4Nature Tencel™️ Trouser (Cream / 36 / 32) 40% off
+   + [7] Gardeur Bono Modern Fit Trouser (Navy Blue / 34" / 34) 50% off
+   + [7] Gardeur Savage2 Pique Weave Trouser (Navy / 38" / 34) 50% off
+   + [6] Gardeur Bradley Modern Fit Move Lite Jean (White / 36" / 34) 50% off
+   + [6] Gardeur Bradley Modern Fit Move Lite Jean (White / 38" / 34) 50% off
+   + [7] Gardeur Bill3 Modern Fit Superior Linen Trouser (Sand / 34" / 34) 50% off
+   + [8] Exibit Wool Cashmere Blend Long Sleeve Knit (Camel / L) 57% off
+   + [8] Caliban Cotton Blend Shirt (Blue/White Micro Pattern / 42) 48% off
+   + [7] Caliban 820 Long Sleeve Check Shirt (Purple/Pink Check / 42) 54% off
+   + [6] Gardeur Bono Modern Fit Business Hero Travel Trouser (Navy / 38" / 34) 50% off
+-> Trunk Clothiers
+   0 on-sale variants
+   0 pass rules
+-> Up There Store
+   184 on-sale variants (after brand allowlist: 10 brands)
+   12 pass rules
+-> Vintage Marketplace
+   101 on-sale variants (after brand allowlist: 9 brands)
+   13 pass rules
+   + [7] VINTAGE CHAPS RALPH LAUREN L/S SHIRT (L) *DISTRESSED (L) 0% off
+   + [7] VINTAGE CHAPS RALPH LAUREN REVERSIBLE JACKET (L) (L) 0% off
+   + [6] VINTAGE RALPH LAUREN S/S SHIRT (L) (L) 0% off
+   + [8] VINTAGE CHAPS RALPH LAUREN S/S SHIRT (L) (L) 0% off
+   + [7] VINTAGE RALPH LAUREN S/S SHIRT (L) (L) 0% off
+   + [7] VINTAGE RALPH LAUREN L/S SHIRT (L) *FADED SLEEVE (L) 0% off
+   + [7] VINTAGE RALPH LAUREN L/S SHIRT (L) *MARK ON BACK OF SLEEVE (L) 0% off
+   + [9] VINTAGE CHAPS RALPH LAUREN S/S SHIRT (L) (L) 0% off
+   + [7] VINTAGE CHAPS RALPH LAUREN FLANNEL L/S SHIRT (L) (L) 0% off
+   + [7] VINTAGE RALPH LAUREN CHAPS SWEATER (L) (L) 0% off
+   + [8] VINTAGE RALPH LAUREN SWEATER (L) (L) 0% off
+   + [7] VINTAGE TOMMY HILFIGER L/S SHIRT (L) (L) 0% off
+-> Wythe
+   0 on-sale variants
+   0 pass rules
+Done. 28 new items surfaced (36 items scored this run).
