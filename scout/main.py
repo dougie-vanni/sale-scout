@@ -50,9 +50,14 @@ def main():
             continue
         allow = [a.strip().lower() for a in (retailer.get("vendor_allow") or "").split(",") if a.strip()]
         if allow:
-            candidates = [c for c in candidates
-                          if any(a in c.get("vendor", "").strip().lower()
-                                 for a in allow)]
+            if retailer.get("vintage"):
+                # Vintage stores use the shop name as vendor; search title instead
+                candidates = [c for c in candidates
+                              if any(a in c.get("title", "").lower() for a in allow)]
+            else:
+                candidates = [c for c in candidates
+                              if any(a in c.get("vendor", "").strip().lower()
+                                     for a in allow)]
         print(f"   {len(candidates)} on-sale variants"
               + (f" (after brand allowlist: {len(allow)} brands)" if allow else ""))
 

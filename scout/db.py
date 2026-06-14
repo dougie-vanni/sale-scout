@@ -1,5 +1,6 @@
 """Thin Supabase REST client (no SDK dependency)."""
 import os
+import time
 import requests
 
 
@@ -19,6 +20,33 @@ class DB:
                          params=params, timeout=30)
         r.raise_for_status()
         return r.json()
+
+    def _write(self, method: str, path: str, params: dict, body: dict,
+               prefer: str = "return=minimal", max_attempts: int = 4) -> None:
+        """POST/PATCH with exponential-backoff retry on timeout or 5xx."""
+        hdrs = {**self.h, "Prefer": prefer}
+        fn = requests.post if method == "post" else requests.patch
+        last_err = "unknown"
+        for attempt in range(max_attempts):
+            try:
+                r = fn(f"{self.url}/rest/v1/{path}", headers=hdrs,
+                       params=params, json=body, timeout=30)
+                if r.status_code in (500, 502, 503, 504):
+                    last_err = f"HTTP {r.status_code}"
+                    time.sleep(2 ** attempt)
+                    continue
+                r.raise_for_status()
+                return
+            except requests.exceptions.Timeout:
+                last_err = "timeout"
+                if attempt < max_attempts - 1:
+                    print(f"  ! DB write timeout, retrying ({attempt + 1}/{max_attempts - 1})")
+                    time.sleep(2 ** attempt)
+            except requests.exceptions.ConnectionError as e:
+                last_err = str(e)
+                if attempt < max_attempts - 1:
+                    time.sleep(2 ** attempt)
+        raise RuntimeError(f"DB write failed after {max_attempts} attempts: {last_err}")
 
     def existing_items(self) -> dict[str, dict]:
         """item_key -> {status, price} for dedup/resurface decisions."""
@@ -40,14 +68,10 @@ class DB:
         return {r["retailer_id"] for r in rows}
 
     def upsert_item(self, item: dict):
-        r = requests.post(
-            f"{self.url}/rest/v1/items",
-            headers={**self.h, "Prefer": "resolution=merge-duplicates,return=minimal"},
-            params={"on_conflict": "item_key"},
-            json=item, timeout=30)
-        r.raise_for_status()
+        self._write("post", "items", {"on_conflict": "item_key"}, item,
+                    prefer="resolution=merge-duplicates,return=minimal")
 
-    # ── sweep control flags (control table; tolerate table not existing) ──
+    # ── sweep control flags ──────────────────────────────────────────────────
     def get_flag(self, key: str) -> bool:
         try:
             rows = self._get("control", {"select": "value", "key": f"eq.{key}"})
@@ -56,19 +80,15 @@ class DB:
             return False
 
     def set_flag(self, key: str, value: bool) -> None:
-        import requests as _rq
         try:
-            _rq.patch(f"{self.url}/rest/v1/control", headers=self.h,
-                      params={"key": f"eq.{key}"},
-                      json={"value": value}, timeout=30).raise_for_status()
+            self._write("patch", "control", {"key": f"eq.{key}"}, {"value": value})
         except Exception as e:
             print(f"  ! could not set flag {key}: {e}")
 
-    # ── website-editable config (fallback to repo files if tables absent) ──
+    # ── website-editable config ──────────────────────────────────────────────
     def get_retailers(self) -> list | None:
         try:
             rows = self._get("retailers", {"select": "*", "order": "id"})
-            # strip nulls so rows behave like the JSON files (absent keys)
             return [{k: v for k, v in r.items() if v is not None}
                     for r in rows] if rows else None
         except Exception:
@@ -83,13 +103,10 @@ class DB:
 
     def set_sweep_status(self, state: str, detail: str = "") -> None:
         import datetime
-        import requests as _rq
         try:
-            _rq.patch(f"{self.url}/rest/v1/sweep_status", headers=self.h,
-                      params={"id": "eq.1"},
-                      json={"state": state, "detail": detail[:200],
-                            "updated_at": datetime.datetime.now(
-                                datetime.timezone.utc).isoformat()},
-                      timeout=30).raise_for_status()
+            self._write("patch", "sweep_status", {"id": "eq.1"},
+                        {"state": state, "detail": detail[:200],
+                         "updated_at": datetime.datetime.now(
+                             datetime.timezone.utc).isoformat()})
         except Exception as e:
             print(f"  ! could not set sweep_status: {e}")
