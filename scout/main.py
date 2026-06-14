@@ -3,7 +3,7 @@ import json
 import pathlib
 import sys
 
-from . import shopify, filters, scorer, landed
+from . import shopify, filters, scorer, landed, brief
 from .db import DB
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -117,6 +117,8 @@ def main():
         print(f"NOTE: hit max_scores_per_run={max_scores}; remainder deferred to next run.")
     if not stopped:
         deferred = " (backlog remaining)" if max_scores and scored >= max_scores else ""
+        print("Updating style brief from verdicts...")
+        brief.maybe_update_brief(db, prefs)
         db.set_sweep_status("idle", f"{new_count} new, {scored} scored{deferred}")
     print(f"Done. {new_count} new items surfaced ({scored} items scored this run).")
 
