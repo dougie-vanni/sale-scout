@@ -231,7 +231,7 @@ function card(it) {
         <button class="b-cheap">Cheaper</button>
       </div>
       <button class="mute">Mute ${esc(it.retailer_name)}</button>` : ''}
-      ${tab === 'approved' ? `
+      ${tab === 'approved' || tab === 'too_expensive' ? `
       <div class="actions">
         <button class="b-bought">Bought it</button>
         <button class="b-pass">Pass</button>
@@ -243,7 +243,7 @@ function card(it) {
     el.querySelector('.b-cheap').onclick = () => verdict(it, 'too_expensive', el);
     el.querySelector('.mute').onclick = () => muteRetailer(it);
   }
-  if (tab === 'approved') {
+  if (tab === 'approved' || tab === 'too_expensive') {
     el.querySelector('.b-bought').onclick = () => verdict(it, 'purchased', el);
     el.querySelector('.b-pass').onclick = () => verdict(it, 'rejected', el);
   }

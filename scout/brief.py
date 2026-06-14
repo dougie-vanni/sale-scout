@@ -60,19 +60,13 @@ def maybe_update_brief(db, prefs: dict) -> None:
             for i in items
         ) or "(none yet)"
 
-    # Label positive items by strength of signal
-    strong = [i for i in positives if i.get("status") in ("approved", "purchased")]
-    medium = [i for i in positives if i.get("status") == "too_expensive"]
-
     current_brief = prefs.get("style_brief", "")
     prompt = (
         "You are refining a style brief for a personal menswear AI scout. "
         "The scout scores sale items against this brief to surface only items matching the owner's taste.\n\n"
         f"Current brief:\n{current_brief}\n\n"
-        f"Items the owner SAVED or BOUGHT (strongest positive signal — {len(strong)} items):\n"
-        f"{fmt(strong)}\n\n"
-        f"Items marked 'waiting on price' — likes the style, price too high ({len(medium)} items):\n"
-        f"{fmt(medium)}\n\n"
+        f"Items the owner wants ({len(positives)} items — saved, waiting on price, or bought):\n"
+        f"{fmt(positives)}\n\n"
         f"Items the owner PASSED on despite a high AI score (negative signal — {len(negatives)} items):\n"
         f"{fmt(negatives)}\n\n"
         "Rewrite the style brief in 3–5 sentences to better capture what this owner actually buys. "
