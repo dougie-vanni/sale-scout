@@ -10,7 +10,7 @@
  * (Application Keys → Alerts & Notifications → Verification token).
  */
 
-const VERIFICATION_TOKEN = "salescout-ebay-b7ef0f3e";
+const VERIFICATION_TOKEN = "salescout-ebay-b7eghf3e-569870457885";
 
 async function sha256hex(input: string): Promise<string> {
   const data = new TextEncoder().encode(input);
