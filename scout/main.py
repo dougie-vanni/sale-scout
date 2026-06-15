@@ -3,7 +3,7 @@ import json
 import pathlib
 import sys
 
-from . import shopify, filters, scorer, landed, brief
+from . import shopify, filters, scorer, landed, brief, ebay
 from .db import DB
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -39,15 +39,24 @@ def main():
             break
         if not retailer.get("enabled") or retailer["id"] in muted:
             continue
-        if retailer["type"] != "shopify":
+        if retailer["type"] == "ebay":
+            try:
+                candidates = ebay.search_candidates(retailer)
+            except Exception as e:
+                print(f"  ! eBay retailer failed entirely: {e}")
+                continue
+        elif retailer["type"] != "shopify":
             continue  # custom scrapers: future work
         print(f"-> {retailer['name']}")
         db.set_sweep_status("running", retailer["name"])
-        try:
-            candidates = shopify.sale_candidates(retailer)
-        except Exception as e:
-            print(f"  ! retailer failed entirely: {e}")
-            continue
+        if retailer["type"] == "shopify":
+            try:
+                candidates = shopify.sale_candidates(retailer)
+            except Exception as e:
+                print(f"  ! retailer failed entirely: {e}")
+                continue
+        else:
+            candidates = []  # populated by type-specific block above
         allow = [a.strip().lower() for a in (retailer.get("vendor_allow") or "").split(",") if a.strip()]
         if allow:
             if retailer.get("vintage"):
@@ -82,7 +91,7 @@ def main():
 
             if max_scores and scored >= max_scores:
                 continue  # cap hit: leave unscored for the next run
-            if not shopify.variant_available(c, retailer):
+            if retailer["type"] == "shopify" and not shopify.variant_available(c, retailer):
                 continue  # feed said in stock, product page says sold out
             if scored and scored % 20 == 0 and db.get_flag("stop_requested"):
                 stopped = True

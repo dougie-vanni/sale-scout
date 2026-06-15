@@ -293,6 +293,19 @@
       "enabled": true,
       "vintage": true,
       "vendor_allow": "polo ralph lauren, ralph lauren, tommy hilfiger, brooks brothers, lacoste, pendleton, woolrich, izod, j.crew, lands end, l.l. bean"
+    },
+    {
+      "id": "ebay_au",
+      "name": "eBay AU",
+      "type": "ebay",
+      "enabled": true,
+      "region": "AU",
+      "currency": "AUD",
+      "shipping_aud": 0,
+      "vintage": true,
+      "marketplace": "EBAY_AU",
+      "ebay_keywords": "polo ralph lauren brooks brothers j press pendleton woolrich lacoste izod lands end",
+      "ebay_sizes": "L,Large,XL,X-Large"
     }
   ]
 }
