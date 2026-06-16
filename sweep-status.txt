@@ -13,7 +13,7 @@ exit_code=0
    0 on-sale variants
    0 pass rules
 -> Lost & Found
-   148 on-sale variants (after brand allowlist: 20 brands)
+   149 on-sale variants (after brand allowlist: 20 brands)
    10 pass rules
 -> The Maple Store
    121 on-sale variants (after brand allowlist: 13 brands)
@@ -25,7 +25,7 @@ exit_code=0
    315 on-sale variants
    28 pass rules
 -> Modern Classics
-   71 on-sale variants
+   70 on-sale variants
    6 pass rules
 -> namu shop
    17 on-sale variants (after brand allowlist: 6 brands)
@@ -34,7 +34,7 @@ exit_code=0
    65 on-sale variants
    6 pass rules
 -> Providence Clothing Co
-   722 on-sale variants
+   776 on-sale variants
    15 pass rules
 -> RetroStar
    252 on-sale variants (after brand allowlist: 11 brands)
@@ -59,4 +59,4 @@ exit_code=0
    0 pass rules
 Updating style brief from verdicts...
   (brief update skipped — 80 saves, next update at 100)
-Done. 9 new items surfaced (10 items scored this run).
+Done. 1 new items surfaced (1 items scored this run).
