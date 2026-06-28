@@ -1,62 +1,62 @@
 exit_code=0
 --- last 60 lines ---
-   0 pass rules
--> Kamakura Shirts
-   1146 on-sale variants
-   4 pass rules
-   + [7] 【Summer Special】 Zip-Up Cashmere Sweater (Brown (35) / L) 30% off
-   + [8] 【Summer Special】 NEW YORK CLASSIC FIT - Italian Spread Oxford (Green (41) / 42-90 (16½-35½)) 31% off
--> Christian Kimber
-   0 on-sale variants
-   0 pass rules
--> Lost & Found
-   147 on-sale variants (after brand allowlist: 20 brands)
-   9 pass rules
--> The Maple Store
-   117 on-sale variants (after brand allowlist: 13 brands)
-   27 pass rules
-   + [6] Pocket Tee Pin Stripe Off White (XX-Large) 30% off
+   + [6] Knit Tee Dot Pattern Jacquard Brown (X-Large) 30% off
+   + [7] Pocket Tee Indigo Stripe Off White (X-Large) 30% off
+   + [7] Pocket Tee Indigo Stripe Off White (XX-Large) 30% off
+   + [7] B.D. Oxford Candy Stripe Blue (X-Large) 30% off
 -> Mercer & Sons
    0 on-sale variants
    0 pass rules
 -> Midwest Trader
-   311 on-sale variants
-   29 pass rules
-   + [7] Carhartt Detroit Blanket Lined Jacket (L) 0% off
+   373 on-sale variants
+   46 pass rules
+   + [7] Dickies 874 Olive (34) 0% off
+   + [7] Dickies 874 Olive (36) 0% off
+   + [6] Dickies 874 Choc Brown (36) 0% off
+   + [7] Dickies Rinsed Moss Carpenter (34) 0% off
+   + [6] Dickies New Brown Overalls (34) 0% off
 -> Modern Classics
-   69 on-sale variants
-   6 pass rules
+   63 on-sale variants
+   5 pass rules
 -> namu shop
-   17 on-sale variants (after brand allowlist: 6 brands)
+   15 on-sale variants (after brand allowlist: 6 brands)
    1 pass rules
 -> Pickings & Parry
-   64 on-sale variants
+   57 on-sale variants
    6 pass rules
 -> Providence Clothing Co
-   784 on-sale variants
+   741 on-sale variants
    16 pass rules
+   + [7] Puglia Varsity Bomber Jacket - Tan (L) 52% off
+   + [7] Roy Jeans - Eco Vintage Light Blue (34/34) 40% off
 -> RetroStar
-   251 on-sale variants (after brand allowlist: 11 brands)
+   242 on-sale variants (after brand allowlist: 11 brands)
    0 pass rules
 -> Standard & Strange
-   476 on-sale variants
+   461 on-sale variants
    2 pass rules
 -> Styleroom
-   839 on-sale variants
-   60 pass rules
+   826 on-sale variants
+   59 pass rules
 -> Trunk Clothiers
    0 on-sale variants
    0 pass rules
 -> Up There Store
-   177 on-sale variants (after brand allowlist: 10 brands)
-   11 pass rules
+   160 on-sale variants (after brand allowlist: 10 brands)
+   27 pass rules
+   + [6] Adventure Shirt IV Seersucker Gingham - Blue/Sax (Large) 30% off
+   + [6] Adventure Shirt IV Seersucker Gingham - Blue/Sax (X-Large) 30% off
+   + [7] Pocket Tee Indigo Stripe - Off White (X-Large) 30% off
+   + [7] Pocket Tee Indigo Stripe - Off White (XX-Large) 30% off
+   + [6] Open B.D. Panama Plaid Double Face - Brown (X-Large) 30% off
+   + [7] Indigo Cardigan Patchwork - Indigo (X-Large) 30% off
 -> Vintage Marketplace
-   101 on-sale variants (after brand allowlist: 9 brands)
-   14 pass rules
-   + [7] VINTAGE RALPH LAUREN SHIRT (L) *DISTRESSED CUFF (L) 0% off
+   107 on-sale variants (after brand allowlist: 9 brands)
+   15 pass rules
+   + [7] VINTAGE RALPH LAUREN DENIM HARRINGTON BOMBER JACKET (L) (L) 0% off
 -> Wythe
    0 on-sale variants
    0 pass rules
 Updating style brief from verdicts...
   (brief update skipped — 84 saves, next update at 100)
-Done. 5 new items surfaced (8 items scored this run).
+Done. 30 new items surfaced (60 items scored this run).
